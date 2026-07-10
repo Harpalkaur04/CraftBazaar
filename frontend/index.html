@@ -1,0 +1,1467 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRAFT BAZAAR — Celebrating India's Handmade Heritage</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      /* ── Zara-style layout ─────────────────────────────── */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: white;
+        font-family: var(--font-body);
+        overflow-x: hidden;
+      }
+
+      /* ── TOP NAVBAR ─────────────────────────────────────── */
+      /* .zara-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2rem;
+      background: transparent;
+      transition: background 0.3s ease;
+    }
+
+    .zara-nav.scrolled {
+      background: rgba(248,239,227,0.96);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(74,52,40,0.08);
+    } */
+
+      /* Hamburger — left side  2 lines only */
+      /* .hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  z-index: 1100;
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 100px;
+  height: 2px;
+  background: var(--maroon);
+  transition: all 0.35s ease;
+  transform-origin: center;
+}
+
+/* X animation on open */
+      /* .hamburger-btn.open span:nth-child(1) {
+  transform: translateY(5px) rotate(45deg);
+}
+.hamburger-btn.open span:nth-child(2) {
+  transform: translateY(-5px) rotate(-45deg);
+}  */
+
+      /* Right nav icons */
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      .nav-right-item {
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--maroon);
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.2s;
+        position: relative;
+      }
+
+      .nav-right-item:hover {
+        opacity: 0.65;
+      }
+
+      .cart-count-badge {
+        position: absolute;
+        top: -8px;
+        right: -10px;
+        background: var(--maroon);
+        color: white;
+        font-size: 0.55rem;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+
+      /* ── SIDEBAR OVERLAY ────────────────────────────────── */
+      .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 900;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .sidebar-overlay.open {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      /* ── SIDEBAR ────────────────────────────────────────── */
+      .sidebar-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 320px;
+        height: 100vh;
+        background: var(--bg);
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 5rem 2.5rem 2.5rem;
+        overflow-y: auto;
+        border-right: 1px solid rgba(74, 52, 40, 0.08);
+      }
+
+      .sidebar-menu.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-menu nav {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar-nav-item {
+        font-family: var(--font-head);
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--maroon);
+        text-decoration: none;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(74, 52, 40, 0.08);
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .sidebar-nav-item:hover {
+        color: var(--terracotta);
+        padding-left: 0.5rem;
+      }
+
+      .sidebar-nav-item span {
+        font-size: 1rem;
+        opacity: 0.4;
+      }
+
+      .sidebar-logo {
+        font-family: var(--font-hindi);
+        font-size: 1.1rem;
+        color: var(--maroon);
+        margin-bottom: 2rem;
+        opacity: 0.6;
+      }
+
+      .sidebar-tagline {
+        font-size: 0.75rem;
+        opacity: 0.5;
+        line-height: 1.6;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(74, 52, 40, 0.08);
+      }
+
+      /* ── SEARCH OVERLAY ─────────────────────────────────── */
+      .search-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: var(--bg);
+        z-index: 1100;
+        padding: 1.5rem 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        border-bottom: 1px solid rgba(74, 52, 40, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .search-overlay.open {
+        transform: translateY(0);
+      }
+
+      .search-overlay input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: 1rem;
+        /* color: var(--maroon); */
+        outline: none;
+      }
+
+      .search-overlay input::placeholder {
+        color: rgba(107, 15, 26, 0.3);
+      }
+
+      .search-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--brown);
+        opacity: 0.6;
+      }
+
+      .search-close:hover {
+        opacity: 1;
+      }
+
+      /* ── HERO SECTION — ZARA SPLIT ──────────────────────── */
+      .hero-zara {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+        padding-top: 2rem;
+      }
+
+      /* Left — Brand text */
+      .hero-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4rem 3rem 4rem 2rem;
+        position: relative;
+        background-color: white;
+      }
+
+      .hero-brand-text {
+        font-family: "Helvetica Now Text";
+        font-size: clamp(3.5rem, 7vw, 7rem);
+        font-weight: 700;
+        color: black;
+        line-height: 1;
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
+      }
+
+      .hero-brand-sub {
+        font-family: var(--font-head);
+        font-size: clamp(1rem, 2vw, 1.4rem);
+        font-style: italic;
+        color: black;
+        margin-bottom: 2rem;
+      }
+
+      .hero-desc {
+        font-size: 1.2rem;
+        line-height: 1.9;
+        /* opacity: 0.7; */
+        max-width: 380px;
+        margin-bottom: 2.5rem;
+        color: black;
+        font-style: oblique;
+      }
+
+      .hero-stats-zara {
+        display: flex;
+        gap: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(74, 52, 40, 0.1);
+      }
+
+      .hero-stat-item {
+        text-align: left;
+      }
+
+      .hero-stat-num {
+        font-family: var(--font-head);
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--maroon);
+        display: block;
+      }
+
+      .hero-stat-label {
+        font-size: 0.68rem;
+        opacity: 0.55;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .hero-right {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        /* background-color:white; */
+      }
+
+      .hero-img-scroll {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .hero-img-scroll img {
+        position: absolute;
+        inset: 0;
+
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        transform: translateX(100%);
+        transition: transform 0.8s ease-in-out;
+
+        will-change: transform;
+      }
+
+      /* Current image */
+      .hero-img-scroll img.active {
+        transform: translateX(0);
+        z-index: 2;
+      }
+
+      /* Leaving image */
+      .hero-img-scroll img.leave {
+        transform: translateX(-100%);
+        z-index: 1;
+      }
+      /* ── REST OF PAGE ───────────────────────────────────── */
+      .page-content {
+        background-color: white;
+      }
+
+      /* ── States section ─────────────────────────────────── */
+      .section {
+        padding: 5rem 0;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* ── Categories carousel same as before ─────────────── */
+      .section-head {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+      .section-label {
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--terracotta);
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      .section-head h2 {
+        font-family: var(--font-head);
+        font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+        color: var(--maroon);
+      }
+      .divider {
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--terracotta), var(--mustard));
+        margin: 1rem auto 0;
+        border-radius: 2px;
+      }
+
+      /* ── Responsive ─────────────────────────────────────── */
+      @media (max-width: 768px) {
+        .hero-zara {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+        .hero-right {
+          height: 60vw;
+          order: -1;
+        }
+        .hero-left {
+          padding: 2rem 1.5rem;
+        }
+        .sidebar-menu {
+          width: 280px;
+        }
+      }
+
+      /* fade-up animation */
+      .fade-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── Search Overlay ──────────────────────────────────── -->
+    <div class="search-overlay" id="search-overlay">
+      <input
+        type="text"
+        placeholder="WHAT ARE YOU LOOKING FOR?"
+        id="search-input-overlay"
+        onkeydown="if (event.key === 'Enter') doSearch();"
+      />
+      <button class="search-close" onclick="toggleSearch()">✕</button>
+    </div>
+
+    <!-- ── Sidebar Overlay ─────────────────────────────────── -->
+    <div
+      class="sidebar-overlay"
+      id="sidebar-overlay"
+      onclick="toggleSidebar()"
+    ></div>
+
+    <!-- ── Sidebar Menu ────────────────────────────────────── -->
+    <div class="sidebar-menu" id="sidebar-menu">
+      <div class="sidebar-logo">CRAFT BAZAAR</div>
+      <nav>
+        <a href="/index.html" class="sidebar-nav-item">Home <span>→</span></a>
+        <a href="/pages/explore.html" class="sidebar-nav-item"
+          >Explore <span>→</span></a
+        >
+        <a href="/pages/states.html" class="sidebar-nav-item"
+          >States <span>→</span></a
+        >
+        <a href="/pages/categories.html" class="sidebar-nav-item"
+          >Categories <span>→</span></a
+        >
+        <a href="/pages/about.html" class="sidebar-nav-item"
+          >About <span>→</span></a
+        >
+        <button
+          class="btn btn-outline"
+          style="margin-top: 1.2rem"
+          onclick="logout()"
+        >
+          Log Out
+        </button>
+      </nav>
+      <p class="sidebar-tagline" style="color: black">
+        A curated marketplace celebrating authentic Indian handicrafts from
+        artisans across every state of India.
+      </p>
+    </div>
+
+    <!-- ── Top Navbar ──────────────────────────────────────── -->
+    <nav class="zara-nav" id="zara-nav">
+      <!-- Left: Hamburger -->
+      <button
+        class="hamburger-btn"
+        id="hamburger-btn"
+        onclick="toggleSidebar()"
+      >
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Right: Search, Bag, Login -->
+      <div class="nav-right">
+        <a class="nav-right-item" onclick="toggleSearch()">Search</a>
+        <a
+          class="nav-right-item"
+          href="/pages/cart.html"
+          style="position: relative"
+        >
+          Bag
+          <span class="cart-count-badge cart-badge" style="display: none"
+            >0</span
+          >
+        </a>
+        <a class="nav-right-item" id="nav-login-link" href="/pages/login.html"
+          >Log In</a
+        >
+        <a
+          class="nav-right-item"
+          id="nav-profile-link"
+          href="/pages/dashboard.html"
+          style="display: none"
+          >Account</a
+        >
+      </div>
+    </nav>
+
+    <!-- ── Hero — Zara split layout ────────────────────────── -->
+    <section class="hero-zara">
+      <!-- Left: Brand + Details -->
+      <div class="hero-left">
+        <h1 class="hero-brand-text">CRAFT<br />BAZAAR</h1>
+        <p class="hero-brand-sub">
+          <b>Made by hand. | </b>Sold through<b> | CRAFT BAZAAR</b>
+        </p>
+        <p class="hero-desc">
+          A curated marketplace where India's finest artisans bring their
+          centuries-old craft traditions to your doorstep. Every piece tells a
+          story — of patience, skill, and love.
+        </p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap">
+          <a href="/pages/explore.html" class="btn btn-primary"
+            >Explore Crafts →</a
+          >
+          <a href="/pages/about.html" class="btn btn-outline">Our Story</a>
+        </div>
+      </div>
+      <!-- <div class="hero-stats-zara">
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">1,200+</span>
+          <span class="hero-stat-label">Artisans</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">8,000+</span>
+          <span class="hero-stat-label">Handmade Products</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">28</span>
+          <span class="hero-stat-label">States</span>
+        </div>
+      </div>
+     -->
+
+      <!-- Right: Auto-scrolling product images -->
+      <div class="hero-right">
+        <div class="hero-img-scroll" id="hero-img-scroll">
+          <!-- populated by JS from real products -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Page Content ─────────────────────────────────────── -->
+    <div class="page-content">
+      <!-- Categories -->
+      <section class="section" style="padding-top: 2rem; padding-bottom: 3rem">
+        <div class="container">
+          <div class="section-head fade-up">
+            <span class="section-label">Shop by Craft</span>
+            <h2>Explore Categories</h2>
+            <div class="divider"></div>
+          </div>
+          <div style="position: relative" class="fade-up">
+            <button
+              id="cat-prev"
+              onclick="slideCategories(-1)"
+              style="
+                position: absolute;
+                left: -20px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: var(--white);
+                border: 2px solid var(--light);
+                box-shadow: 0 4px 16px var(--shadow);
+                cursor: pointer;
+                font-size: 1.2rem;
+                color: var(--maroon);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10;
+                transition: all 0.2s;
+              "
+              onmouseover="
+                this.style.background = 'var(--maroon)';
+                this.style.color = 'white';
+              "
+              onmouseout="
+                this.style.background = 'var(--white)';
+                this.style.color = 'var(--maroon)';
+              "
+            >
+              ‹
+            </button>
+            <div id="cat-container" style="overflow: hidden; padding: 0.5rem 0">
+              <div
+                id="cat-track"
+                style="
+                  display: flex;
+                  gap: 1rem;
+                  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                  width: max-content;
+                "
+              >
+                <div
+                  class="category-chip active"
+                  data-cat=""
+                  onclick="selectCat(this)"
+                  style="width: 200px; min-width: 200px"
+                >
+                  <span class="chip-icon">🏺</span
+                  ><span class="chip-label">All Crafts</span>
+                </div>
+                <div
+                  class="category-chip"
+                  data-cat="textiles"
+                  onclick="selectCat(this)"
+                  style="width: 200px; min-width: 200px"
+                >
+                  <span class="chip-icon">🧵</span
+                  ><span class="chip-label">Textiles</span>
+                </div>
+                <div
+                  class="category-chip"
+                  data-cat="jewellery"
+                  onclick="selectCat(this)"
+                  style="width: 200px; min-width: 200px"
+                >
+                  <span class="chip-icon">💍</span
+                  ><span class="chip-label">Jewellery</span>
+                </div>
+                <div
+                  class="category-chip"
+                  data-cat="pottery"
+                  onclick="selectCat(this)"
+                  style="width: 200px; min-width: 200px"
+                >
+                  <span class="chip-icon">🏺</span
+                  ><span class="chip-label">Pottery</span>
+                </div>
+                <div
+                  class="category-chip"
+                  data-cat="home-decor"
+                  onclick="selectCat(this)"
+                  style="width: 200px; min-width: 200px"
+                >
+                  <span class="chip-icon">🏮</span
+                  ><span class="chip-label">Home Décor</span>
+                </div>
+                <div
+                  class="category-chip"
+                  data-cat="footwear-leather"
+                  onclick="selectCat(this)"
+                  style="width: 200px; min-width: 200px"
+                >
+                  <span class="chip-icon">👡</span
+                  ><span class="chip-label">Footwear</span>
+                </div>
+                <div
+                  class="category-chip"
+                  data-cat="paintings"
+                  onclick="selectCat(this)"
+                  style="width: 200px; min-width: 200px"
+                >
+                  <span class="chip-icon">🖼️</span
+                  ><span class="chip-label">Paintings</span>
+                </div>
+                <div
+                  class="category-chip"
+                  data-cat="carpets-rugs"
+                  onclick="selectCat(this)"
+                  style="width: 200px; min-width: 200px"
+                >
+                  <span class="chip-icon">🪆</span
+                  ><span class="chip-label">Carpets & Rugs</span>
+                </div>
+                <div
+                  class="category-chip"
+                  data-cat="toys-puppets"
+                  onclick="selectCat(this)"
+                  style="width: 200px; min-width: 200px"
+                >
+                  <span class="chip-icon">🎎</span
+                  ><span class="chip-label">Toys & Puppets</span>
+                </div>
+              </div>
+            </div>
+            <button
+              id="cat-next"
+              onclick="slideCategories(1)"
+              style="
+                position: absolute;
+                right: -20px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: var(--white);
+                border: 2px solid var(--light);
+                box-shadow: 0 4px 16px var(--shadow);
+                cursor: pointer;
+                font-size: 1.2rem;
+                color: var(--maroon);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10;
+                transition: all 0.2s;
+              "
+              onmouseover="
+                this.style.background = 'var(--maroon)';
+                this.style.color = 'white';
+              "
+              onmouseout="
+                this.style.background = 'var(--white)';
+                this.style.color = 'var(--maroon)';
+              "
+            >
+              ›
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Products -->
+      <section class="section" style="padding-top: 1rem">
+        <div class="container">
+          <div class="section-head fade-up">
+            <span class="section-label">Handpicked for you</span>
+            <h2>Featured Crafts</h2>
+            <div class="divider"></div>
+            <p
+              style="
+                max-width: 500px;
+                margin: 1rem auto 0;
+                font-size: 0.9rem;
+                opacity: 0.75;
+              "
+            >
+              Curated pieces from India's most talented artisans
+            </p>
+          </div>
+          <div class="products-grid fade-up" id="featured-products">
+            <div style="grid-column: 1/-1"><div class="spinner"></div></div>
+          </div>
+          <div style="text-align: center; margin-top: 2.5rem" class="fade-up">
+            <a href="/pages/explore.html" class="btn btn-outline"
+              >View All Products →</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Explore by States -->
+      <section class="section" style="background: white">
+        <div class="container">
+          <div class="section-head fade-up">
+            <span class="section-label">Journey across India</span>
+            <h2>Explore by State</h2>
+            <div class="divider"></div>
+            <p
+              style="
+                max-width: 500px;
+                margin: 1rem auto 0;
+                font-size: 0.9rem;
+                opacity: 0.75;
+              "
+            >
+              Every state in India has its own unique craft tradition passed
+              down through generations
+            </p>
+          </div>
+          <div class="states-grid fade-up" id="states-grid"></div>
+          <div style="text-align: center; margin-top: 2rem" class="fade-up">
+            <a href="/pages/states.html" class="btn btn-outline"
+              >View All States →</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Auto-scrolling Artisans ─────────────────────────── -->
+      <section class="section" style="padding-top: 1rem">
+        <div class="container">
+          <div class="section-head fade-up">
+            <span class="section-label">Meet the makers</span>
+            <h2>Our Artisans</h2>
+            <div class="divider"></div>
+            <p>
+              Skilled craftspeople from every corner of India — approved and
+              verified by CRAFT BAZAAR
+            </p>
+          </div>
+        </div>
+
+        <div class="scroll-track-wrap fade-up">
+          <div class="scroll-track" id="artisans-scroll-track">
+            <div class="spinner"></div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem" class="fade-up">
+          <a href="/pages/explore.html" class="btn btn-outline"
+            >Explore Their Crafts →</a
+          >
+        </div>
+      </section>
+
+      <!-- Auto-scrolling Reviews -->
+      <section class="section" style="background: white; padding-bottom: 1rem">
+        <div class="container">
+          <div class="section-head fade-up">
+            <span class="section-label">What people say</span>
+            <h2>Stories from our Community</h2>
+            <div class="divider"></div>
+          </div>
+        </div>
+        <div
+          style="overflow: hidden; position: relative; padding: 1rem 0"
+          class="fade-up"
+        >
+          <div
+            class="scroll-track scroll-track-reviews"
+            id="reviews-scroll-track"
+          >
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★★</div>
+              <p class="review-scroll-text">
+                The Bandhani dupatta I ordered is absolutely breathtaking. You
+                can feel the care in every hand-tied dot.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">🙍</div>
+                <div>
+                  <div class="review-scroll-author-name">Priya Mehta</div>
+                  <div class="review-scroll-product">Mumbai, Maharashtra</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★★</div>
+              <p class="review-scroll-text">
+                I bought Blue Pottery pieces and every guest asks where I got
+                them. The craft story made it even more special.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">🧑</div>
+                <div>
+                  <div class="review-scroll-author-name">Rohan Sharma</div>
+                  <div class="review-scroll-product">Delhi</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★★</div>
+              <p class="review-scroll-text">
+                Finding these authentic pieces online brought tears to my eyes.
+                CRAFT BAZAAR is preserving something truly precious.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">👩</div>
+                <div>
+                  <div class="review-scroll-author-name">Ananya Krishnan</div>
+                  <div class="review-scroll-product">Bengaluru, Karnataka</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★☆</div>
+              <p class="review-scroll-text">
+                The Madhubani painting I received is even more beautiful in
+                person. Colors are vivid and the detail is incredible.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">👨</div>
+                <div>
+                  <div class="review-scroll-author-name">Vikram Nair</div>
+                  <div class="review-scroll-product">Chennai, Tamil Nadu</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★★</div>
+              <p class="review-scroll-text">
+                Ordered Pashmina shawls for my mother and she hasn't taken them
+                off! The softness is unreal.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">👩</div>
+                <div>
+                  <div class="review-scroll-author-name">Deepa Iyer</div>
+                  <div class="review-scroll-product">Pune, Maharashtra</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★★</div>
+              <p class="review-scroll-text">
+                The Channapatna wooden toys I got for my kids are gorgeous —
+                smooth, safe and beautifully painted.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">🧑</div>
+                <div>
+                  <div class="review-scroll-author-name">Arjun Menon</div>
+                  <div class="review-scroll-product">Kochi, Kerala</div>
+                </div>
+              </div>
+            </div>
+            <!-- Duplicate for infinite loop -->
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★★</div>
+              <p class="review-scroll-text">
+                The Bandhani dupatta I ordered is absolutely breathtaking. You
+                can feel the care in every hand-tied dot.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">🙍</div>
+                <div>
+                  <div class="review-scroll-author-name">Priya Mehta</div>
+                  <div class="review-scroll-product">Mumbai, Maharashtra</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★★</div>
+              <p class="review-scroll-text">
+                I bought Blue Pottery pieces and every guest asks where I got
+                them. The craft story made it even more special.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">🧑</div>
+                <div>
+                  <div class="review-scroll-author-name">Rohan Sharma</div>
+                  <div class="review-scroll-product">Delhi</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★★</div>
+              <p class="review-scroll-text">
+                Finding these authentic pieces online brought tears to my eyes.
+                CRAFT BAZAAR is preserving something truly precious.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">👩</div>
+                <div>
+                  <div class="review-scroll-author-name">Ananya Krishnan</div>
+                  <div class="review-scroll-product">Bengaluru, Karnataka</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★☆</div>
+              <p class="review-scroll-text">
+                The Madhubani painting I received is even more beautiful in
+                person. Colors are vivid and the detail is incredible.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">👨</div>
+                <div>
+                  <div class="review-scroll-author-name">Vikram Nair</div>
+                  <div class="review-scroll-product">Chennai, Tamil Nadu</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★★</div>
+              <p class="review-scroll-text">
+                Ordered Pashmina shawls for my mother and she hasn't taken them
+                off! The softness is unreal.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">👩</div>
+                <div>
+                  <div class="review-scroll-author-name">Deepa Iyer</div>
+                  <div class="review-scroll-product">Pune, Maharashtra</div>
+                </div>
+              </div>
+            </div>
+            <div class="review-scroll-card">
+              <div class="review-scroll-stars">★★★★★</div>
+              <p class="review-scroll-text">
+                The Channapatna wooden toys I got for my kids are gorgeous —
+                smooth, safe and beautifully painted.
+              </p>
+              <div class="review-scroll-author">
+                <div class="review-scroll-avatar">🧑</div>
+                <div>
+                  <div class="review-scroll-author-name">Arjun Menon</div>
+                  <div class="review-scroll-product">Kochi, Kerala</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Newsletter -->
+      <section style="padding: 5rem 0; background: var(--maroon)">
+        <div class="container">
+          <div
+            style="
+              max-width: 560px;
+              margin: 0 auto;
+              text-align: center;
+              color: white;
+            "
+            class="fade-up"
+          >
+            <h2
+              style="
+                font-family: normal;
+                font-size: clamp(2rem, 4vw, 3rem);
+                font-weight: 700;
+                color: white;
+                line-height: 1.15;
+                margin-bottom: 1rem;
+                /* padding:4px; */
+              "
+            >
+              JOIN OUR NEWSLETTER
+            </h2>
+
+            <p
+              style="
+                font-size: 0.82rem;
+
+                line-height: 1.8;
+                margin-bottom: 2.5rem;
+                max-width: 380px;
+                margin-left: auto;
+                margin-right: auto;
+              "
+            >
+              Get stories from artisans, new product launches, and craft
+              heritage pieces delivered to your inbox.
+            </p>
+
+            <!-- Email form -->
+            <div
+              style="
+                display: flex;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+                max-width: 400px;
+                margin: 0 auto 1rem;
+                padding-bottom: 0.5rem;
+              "
+            >
+              <input
+                type="email"
+                id="newsletter-email"
+                placeholder="Enter your email address"
+                style="
+                  flex: 1;
+                  background: transparent;
+                  border: none;
+                  color: white;
+                  font-family: var(--font-body);
+                  font-size: 0.88rem;
+                  outline: none;
+                  padding: 0.5rem 0;
+                "
+              />
+              <button
+                onclick="subscribeNewsletter()"
+                style="
+                  background: transparent;
+                  border: none;
+                  color: white;
+                  font-size: 0.72rem;
+                  font-weight: 700;
+                  letter-spacing: 0.15em;
+                  text-transform: uppercase;
+                  cursor: pointer;
+                  opacity: 0.75;
+                  padding: 0.5rem 0 0.5rem 1.5rem;
+                  transition: opacity 0.2s;
+                  font-family: var(--font-body);
+                  white-space: nowrap;
+                "
+                onmouseover="this.style.opacity = '1'"
+                onmouseout="this.style.opacity = '0.75'"
+              >
+                Subscribe →
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-grid">
+            <div class="footer-brand">
+              <span
+                class="nav-logo"
+                style="
+                  color: white;
+                  font-family: var(--font-hindi);
+                  font-size: 1.4rem;
+                  display: block;
+                  margin-bottom: 0.5rem;
+                "
+                >CRAFT BAZAAR</span
+              >
+              <div class="footer-bottom">
+                <span
+                  >A celebration of India's living craft traditions. Every
+                  purchase directly supports an artisan family.</span
+                >
+              </div>
+              <div class="footer-social">
+                <a href="#">FACEBOOK</a><a href="#">INSTAGRAM</a
+                ><a href="#">TWITTER</a><a href="#">YOUTUBE</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <span>© 2026 CRAFT BAZAAR. Made with ♥ for India's artisans.</span>
+            <span>Privacy Policy · Terms</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- end page-content -->
+
+    <script src="js/utils.js"></script>
+    <script>
+      // ── Sidebar toggle ────────────────────────────────────────
+      // const toggleSidebar = () => {
+      //   const sidebar  = document.getElementById('sidebar-menu');
+      //   const overlay  = document.getElementById('sidebar-overlay');
+      //   const hamburger = document.getElementById('hamburger-btn');
+      //   sidebar.classList.toggle('open');
+      //   overlay.classList.toggle('open');
+      //   hamburger.classList.toggle('open');
+      // };
+
+      // ── Search toggle ─────────────────────────────────────────
+      // const toggleSearch = () => {
+      //   const searchEl = document.getElementById('search-overlay');
+      //   searchEl.classList.toggle('open');
+      //   if (searchEl.classList.contains('open')) {
+      //     document.getElementById('search-input-overlay').focus();
+      //   }
+      // };
+
+      // const doSearch = () => {
+      //   const keyword = document.getElementById('search-input-overlay').value.trim();
+      //   if (keyword) window.location.href = `/pages/explore.html?keyword=${encodeURIComponent(keyword)}`;
+      // };
+
+      // ── Navbar scroll effect ──────────────────────────────────
+      window.addEventListener("scroll", () => {
+        document
+          .getElementById("zara-nav")
+          .classList.toggle("scrolled", window.scrollY > 50);
+      });
+
+      // ── Auth links ────────────────────────────────────────────
+      const user = getUser();
+      if (user) {
+        document.getElementById("nav-login-link").style.display = "none";
+        const profileLink = document.getElementById("nav-profile-link");
+        profileLink.style.display = "block";
+        profileLink.href =
+          user.role === "artisan"
+            ? "/pages/dashboard.html"
+            : user.role === "admin"
+              ? "/pages/admin.html"
+              : "/pages/profile.html";
+      }
+      updateCartBadge();
+
+      // ── States data ───────────────────────────────────────────
+      const STATES_DATA = [
+        {
+          name: "Rajasthan",
+          icon: "🏯",
+          crafts: "Blue Pottery, Bandhani, Meenakari",
+        },
+        {
+          name: "Gujarat",
+          icon: "🎨",
+          crafts: "Patola, Mirror Work, Kutch Embroidery",
+        },
+        {
+          name: "Uttar Pradesh",
+          icon: "🕌",
+          crafts: "Chikankari, Brass Work, Carpets",
+        },
+        {
+          name: "West Bengal",
+          icon: "🐯",
+          crafts: "Kantha, Terracotta, Dokra",
+        },
+        {
+          name: "Jammu & Kashmir",
+          icon: "❄️",
+          crafts: "Pashmina, Papier-Mâché, Carpets",
+        },
+        {
+          name: "Tamil Nadu",
+          icon: "🏛️",
+          crafts: "Tanjore Paintings, Bronze, Silk",
+        },
+        {
+          name: "Odisha",
+          icon: "🌀",
+          crafts: "Pattachitra, Appliqué, Silver Filigree",
+        },
+        {
+          name: "Maharashtra",
+          icon: "🦁",
+          crafts: "Paithani Sarees, Warli Painting, Bidriware",
+        },
+      ];
+
+      const renderStates = () => {
+        const grid = document.getElementById("states-grid");
+        if (!grid) return;
+        grid.innerHTML = STATES_DATA.map(
+          (s) => `
+        <div class="state-card" onclick="window.location.href='/pages/states.html?state=${encodeURIComponent(s.name)}'">
+          <div class="state-card-icon">${s.icon}</div>
+          <div class="state-card-name">${s.name}</div>
+          <div class="state-card-crafts">${s.crafts}</div>
+        </div>
+      `,
+        ).join("");
+      };
+
+      // ── Load featured products ────────────────────────────────
+      const loadFeaturedProducts = async () => {
+        const grid = document.getElementById("featured-products");
+        try {
+          const data = await api("/products?limit=6");
+          if (!data.products || !data.products.length) {
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="icon">🏺</div><h3>No products yet</h3></div>`;
+            return;
+          }
+          grid.innerHTML = data.products.map(productCardHTML).join("");
+        } catch (err) {
+          grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="icon">🏺</div><h3>Featured crafts coming soon</h3></div>`;
+        }
+      };
+
+      // ── Load hero images from real products ───────────────────
+      const loadHeroImages = async () => {
+        const track = document.getElementById("hero-img-scroll");
+
+        try {
+          const data = await api("/products?limit=100");
+          const products = data.products || [];
+
+          const heroProductIds = [
+            "6a49cc6168d9ac8fe8c15a53",
+            "6a4a7052560aba6854fe6fe2",
+            "6a4a6bed560aba6854fe6fde",
+            "6a49cb9368d9ac8fe8c15a51",
+            "6a49c8af68d9ac8fe8c15a4c",
+            "6a49c50c68d9ac8fe8c15a43",
+            "6a49be4868d9ac8fe8c15a40",
+            "6a49bdd368d9ac8fe8c15a3f",
+            "6a49bd0068d9ac8fe8c15a3e",
+            "6a49bc9168d9ac8fe8c15a3d",
+            "6a49b6fd68d9ac8fe8c15a36",
+            "6a49b4af68d9ac8fe8c15a33",
+            "6a49b45d68d9ac8fe8c15a32",
+            "6a48f8c18d707fd79dc81d11",
+            "6a48f6d18d707fd79dc81d0e",
+          ];
+
+          const withImages = heroProductIds
+            .map((id) => products.find((p) => p._id === id))
+            .filter(Boolean);
+
+          if (!withImages.length) {
+            track.innerHTML = `<div style="width:100%;height:100vh;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:3rem;">🎨</div>`;
+            return;
+          }
+
+          const doubled = [...withImages, ...withImages];
+
+          track.innerHTML = doubled
+            .map(
+              (p) => `
+            <img src="${p.images[0]}"
+                 alt="${p.title}"
+                 onclick="window.location.href='/pages/product.html?id=${p._id}'"
+                 style="cursor:pointer;"
+                 onerror="this.style.display='none'">
+        `,
+            )
+            .join("");
+
+          const images = document.querySelectorAll("#hero-img-scroll img");
+
+          if (images.length === 0) return;
+
+          let current = 0;
+
+          images[current].classList.add("active");
+
+          setInterval(() => {
+            const next = (current + 1) % images.length;
+
+            images[current].classList.remove("active");
+            images[current].classList.add("leave");
+
+            images[next].classList.add("active");
+
+            setTimeout(() => {
+              images[current].classList.remove("leave");
+              images[current].style.transform = "translateX(100%)";
+              current = next;
+            }, 800);
+          }, 3000);
+        } catch (err) {
+          track.innerHTML = `<div style="width:100%;height:100vh;background:var(--light);"></div>`;
+        }
+      };
+
+      // ── Load approved artisans scroll ─────────────────────────
+      const loadArtisansScroll = async () => {
+        const track = document.getElementById("artisans-scroll-track");
+        try {
+          const artisans = await api("/users/artisans?status=approved");
+
+          if (!artisans || artisans.length === 0) {
+            track.innerHTML = `
+        <div style="padding:2rem;opacity:0.6;font-size:0.85rem;text-align:center;">
+          No approved artisans yet — check back soon!
+        </div>`;
+            return;
+          }
+
+          // Duplicate for seamless infinite loop
+          const doubled = [...artisans, ...artisans];
+
+          track.innerHTML = doubled
+            .map(
+              (a) => `
+      <div class="artisan-scroll-card" onclick="window.location.href='/pages/explore.html?artisan=${a._id}'">
+        <div class="artisan-card-left">
+          ${
+            a.profileImage
+              ? `<img src="${a.profileImage}" alt="${a.name}" onerror="this.parentElement.innerHTML='<div class=artisan-card-placeholder>👩‍🎨</div>'">`
+              : `<div class="artisan-card-placeholder">👩‍🎨</div>`
+          }
+          <div class="artisan-card-verified-tag">✓ Verified Artisan</div>
+        </div>
+        <div class="artisan-card-right">
+          <div>
+            <div class="artisan-card-label">Artisan</div>
+            <div class="artisan-card-name">${a.name}</div>
+            <div class="artisan-card-shop">${a.shopName || "Independent Artisan"}</div>
+            <div class="artisan-card-state">📍 ${a.state || "India"}</div>
+            ${
+              a.bio
+                ? `<div class="artisan-card-bio">${a.bio}</div>`
+                : `<div class="artisan-card-bio" style="font-style:italic;opacity:0.45;">Passionate artisan crafting beautiful handmade products.</div>`
+            }
+          </div>
+          <div class="artisan-card-stats">
+            <div class="artisan-card-stat">
+              <span>${a.yearsOfCraft || "10+"}</span>
+              <p>Years</p>
+            </div>
+            <div class="artisan-card-stat">
+              <span>${a.numProducts || "—"}</span>
+              <p>Products</p>
+            </div>
+            <div class="artisan-card-stat">
+              <span>${a.averageRating || "—"}${a.averageRating ? "★" : ""}</span>
+              <p>Rating</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `,
+            )
+            .join("");
+        } catch (err) {
+          console.error("Could not load artisans:", err);
+          track.innerHTML = `
+      <div style="padding:2rem;opacity:0.6;font-size:0.85rem;">
+        Could not load artisans. Backend may not be running.
+      </div>`;
+        }
+      };
+      // ── Category carousel ─────────────────────────────────────
+      let catPage = 0;
+      const CAT_CARD_WIDTH = 216;
+      const CAT_PER_PAGE = 4;
+      const CAT_TOTAL = 9;
+      const CAT_MAX_PAGE = Math.ceil(CAT_TOTAL / CAT_PER_PAGE) - 1;
+
+      const slideCategories = (dir) => {
+        catPage = Math.max(0, Math.min(catPage + dir, CAT_MAX_PAGE));
+        document.getElementById("cat-track").style.transform =
+          `translateX(-${catPage * CAT_PER_PAGE * CAT_CARD_WIDTH}px)`;
+        document.getElementById("cat-prev").style.opacity =
+          catPage === 0 ? "0.3" : "1";
+        document.getElementById("cat-next").style.opacity =
+          catPage === CAT_MAX_PAGE ? "0.3" : "1";
+      };
+
+      const selectCat = (chip) => {
+        document
+          .querySelectorAll(".category-chip")
+          .forEach((c) => c.classList.remove("active"));
+        chip.classList.add("active");
+        const cat = chip.dataset.cat;
+        window.location.href = cat
+          ? `/pages/categories.html?category=${cat}`
+          : "/pages/explore.html";
+      };
+
+      // ── Newsletter ────────────────────────────────────────────
+      const subscribeNewsletter = () => {
+        const email = document.getElementById("newsletter-email").value.trim();
+        if (!email || !email.includes("@")) {
+          showToast("Please enter a valid email", "error");
+          return;
+        }
+        showToast("Thank you for subscribing! 🎨", "success");
+        document.getElementById("newsletter-email").value = "";
+      };
+
+      // ── Scroll animations ─────────────────────────────────────
+      // const initScrollAnimations = () => {
+      //   const observer = new IntersectionObserver(entries => {
+      //     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      //   }, { threshold: 0.12 });
+      //   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+      // };
+
+      // ── Init ─────────────────────────────────────────────────
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("cat-prev").style.opacity = "0.3";
+        // initScrollAnimations();
+        // updateCartBadge();
+      });
+
+      renderStates();
+      loadFeaturedProducts();
+      loadHeroImages();
+      loadArtisansScroll();
+    </script>
+  </body>
+</html>

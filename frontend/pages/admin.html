@@ -1,0 +1,1124 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel — CRAFT BAZAAR</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      .admin-wrap {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 2rem;
+        padding-top: 5.5rem;
+        min-height: 100vh;
+      }
+      .admin-sidebar {
+        background: var(--maroon);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        height: fit-content;
+        position: sticky;
+        top: 5.5rem;
+        color: white;
+      }
+      .admin-sidebar .sidebar-name {
+        color: white;
+      }
+      .admin-sidebar .sidebar-role {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .admin-sidebar .sidebar-avatar-img {
+        background: rgba(255, 255, 255, 0.15);
+      }
+      .admin-nav a {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.7rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.7);
+        transition: all var(--transition);
+        margin-bottom: 0.2rem;
+      }
+      .admin-nav a:hover,
+      .admin-nav a.active {
+        background: rgba(255, 255, 255, 0.12);
+        color: white;
+      }
+      .admin-stat-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        box-shadow: 0 4px 16px var(--shadow);
+        border-left: 4px solid var(--maroon);
+      }
+      .admin-stat-card.terracotta {
+        border-left-color: var(--terracotta);
+      }
+      .admin-stat-card.mustard {
+        border-left-color: var(--mustard);
+      }
+      .admin-stat-card.emerald {
+        border-left-color: var(--emerald);
+      }
+      .admin-stat-num {
+        font-family: var(--font-head);
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--maroon);
+        display: block;
+      }
+      .admin-stat-label {
+        font-size: 0.75rem;
+        opacity: 0.65;
+        margin-top: 0.2rem;
+      }
+      .search-bar {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+      .search-bar input {
+        flex: 1;
+        min-width: 200px;
+        padding: 0.65rem 1rem;
+        border: 1.5px solid var(--light);
+        border-radius: 50px;
+        background: var(--white);
+        font-size: 0.82rem;
+        color: var(--brown);
+        outline: none;
+        font-family: var(--font-body);
+      }
+      .search-bar input:focus {
+        border-color: var(--terracotta);
+      }
+      .action-btn {
+        padding: 0.3rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.72rem;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: all var(--transition);
+      }
+      .action-btn.danger {
+        background: rgba(107, 15, 26, 0.1);
+        color: var(--maroon);
+      }
+      .action-btn.success {
+        background: rgba(47, 143, 131, 0.1);
+        color: var(--emerald);
+      }
+      .action-btn.warning {
+        background: rgba(216, 160, 49, 0.1);
+        color: var(--mustard);
+      }
+      .action-btn:hover {
+        filter: brightness(0.9);
+        transform: scale(1.03);
+      }
+      @media (max-width: 900px) {
+        .admin-wrap {
+          grid-template-columns: 1fr;
+        }
+        .admin-sidebar {
+          position: static;
+        }
+      }
+    </style>
+  </head>
+  <!-- ── Search Overlay ──────────────────────────────────── -->
+  <div class="search-overlay" id="search-overlay">
+    <input
+      type="text"
+      placeholder="WHAT ARE YOU LOOKING FOR?"
+      id="search-input-overlay"
+      onkeydown="if (event.key === 'Enter') doSearch();"
+    />
+    <button class="search-close" onclick="toggleSearch()">✕</button>
+  </div>
+
+  <!-- ── Sidebar Overlay ─────────────────────────────────── -->
+  <div
+    class="sidebar-overlay"
+    id="sidebar-overlay"
+    onclick="toggleSidebar()"
+  ></div>
+
+  <!-- ── Sidebar Menu ────────────────────────────────────── -->
+  <div class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-logo">CRAFT BAZAAR</div>
+    <nav>
+      <a href="/index.html" class="sidebar-nav-item">Home <span>→</span></a>
+      <a href="/pages/explore.html" class="sidebar-nav-item"
+        >Explore <span>→</span></a
+      >
+      <a href="/pages/states.html" class="sidebar-nav-item"
+        >States <span>→</span></a
+      >
+      <a href="/pages/categories.html" class="sidebar-nav-item"
+        >Categories <span>→</span></a
+      >
+      <a href="/pages/about.html" class="sidebar-nav-item"
+        >About <span>→</span></a
+      >
+      <button
+        class="btn btn-outline"
+        style="margin-top: 1.2rem"
+        onclick="logout()"
+      >
+        Log Out
+      </button>
+    </nav>
+    <p class="sidebar-tagline">
+      A curated marketplace celebrating authentic Indian handicrafts from
+      artisans across every state of India.
+    </p>
+  </div>
+
+  <!-- ── Top Navbar ──────────────────────────────────────── -->
+  <nav class="zara-nav" id="zara-nav">
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()">
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-right">
+      <a class="nav-right-item" onclick="toggleSearch()">Search</a>
+      <a
+        class="nav-right-item"
+        href="/pages/cart.html"
+        style="position: relative"
+      >
+        Bag
+        <span class="cart-count-badge cart-badge" style="display: none">0</span>
+      </a>
+      <a class="nav-right-item" id="nav-login-link" href="/pages/login.html"
+        >Log In</a
+      >
+      <a
+        class="nav-right-item"
+        id="nav-profile-link"
+        href="/pages/dashboard.html"
+        style="display: none"
+        >Account</a
+      >
+    </div>
+  </nav>
+  <body class="page-body">
+    <nav class="navbar scrolled">
+      <div class="container">
+        <div class="nav-inner">
+          <a class="nav-logo" href="/index.html">CRAFT BAZAAR</a>
+          <div
+            style="
+              font-size: 0.75rem;
+              background: var(--maroon);
+              color: white;
+              padding: 0.3rem 0.9rem;
+              border-radius: 50px;
+              font-weight: 600;
+            "
+          >
+            🔐 Admin Panel
+          </div>
+          <div class="nav-actions">
+            <a class="nav-icon" href="/index.html">🏠</a>
+            <button
+              class="nav-icon"
+              onclick="logout()"
+              style="font-size: 0.78rem; color: var(--maroon); font-weight: 600"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container admin-wrap">
+      <aside class="admin-sidebar">
+        <div
+          class="sidebar-avatar"
+          style="
+            text-align: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+          "
+        >
+          <div
+            class="sidebar-avatar-img"
+            style="
+              width: 64px;
+              height: 64px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.8rem;
+              margin: 0 auto 0.75rem;
+            "
+          >
+            🛡️
+          </div>
+          <div class="sidebar-name" id="admin-name">Admin</div>
+          <div class="sidebar-role">CRAFT BAZAAR Administrator</div>
+        </div>
+        <nav class="admin-nav">
+          <a href="#" class="active" onclick="showPanel('overview')"
+            >📊 Overview</a
+          >
+          <a href="#" onclick="showPanel('users')">👥 All Users</a>
+          <a href="#" onclick="showPanel('products')">🏺 All Products</a>
+          <a href="#" onclick="showPanel('orders')">📦 All Orders</a>
+          <a href="#" onclick="showPanel('verify')">✅ Verify Handmade</a>
+          <a href="#" onclick="showPanel('artisans')">👨‍🎨 Approve Artisans</a>
+          <a href="#" onclick="showPanel('flagged')">🚩 Flagged Reviews</a>
+        </nav>
+      </aside>
+
+      <main>
+        <!-- Overview -->
+        <div id="panel-overview">
+          <h2 style="margin-bottom: 1.5rem">Admin Overview</h2>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+              gap: 1.2rem;
+              margin-bottom: 2rem;
+            "
+          >
+            <div class="admin-stat-card">
+              <span class="admin-stat-num" id="ov-users">—</span>
+              <div class="admin-stat-label">Total Users</div>
+            </div>
+            <div class="admin-stat-card terracotta">
+              <span class="admin-stat-num" id="ov-artisans">—</span>
+              <div class="admin-stat-label">Artisans</div>
+            </div>
+            <div class="admin-stat-card mustard">
+              <span class="admin-stat-num" id="ov-products">—</span>
+              <div class="admin-stat-label">Total Products</div>
+            </div>
+            <div class="admin-stat-card emerald">
+              <span class="admin-stat-num" id="ov-orders">—</span>
+              <div class="admin-stat-label">Total Orders</div>
+            </div>
+            <div class="admin-stat-card">
+              <span class="admin-stat-num" id="ov-revenue">—</span>
+              <div class="admin-stat-label">Total Revenue</div>
+            </div>
+            <div class="admin-stat-card terracotta">
+              <span class="admin-stat-num" id="ov-pending">—</span>
+              <div class="admin-stat-label">Pending Verifications</div>
+            </div>
+          </div>
+          <div
+            style="
+              background: var(--white);
+              border-radius: var(--radius);
+              padding: 1.5rem;
+              box-shadow: 0 4px 16px var(--shadow);
+              margin-bottom: 1.5rem;
+            "
+          >
+            <h3 style="margin-bottom: 1rem; font-size: 1.1rem">
+              Recent Orders
+            </h3>
+            <div id="ov-recent-orders"><div class="spinner"></div></div>
+          </div>
+          <div
+            style="
+              background: var(--white);
+              border-radius: var(--radius);
+              padding: 1.5rem;
+              box-shadow: 0 4px 16px var(--shadow);
+            "
+          >
+            <h3 style="margin-bottom: 1rem; font-size: 1.1rem">
+              Recently Added Products
+            </h3>
+            <div id="ov-recent-products"><div class="spinner"></div></div>
+          </div>
+        </div>
+
+        <!-- Users -->
+        <div id="panel-users" style="display: none">
+          <h2 style="margin-bottom: 1.5rem">All Users</h2>
+          <div class="search-bar">
+            <input
+              type="text"
+              id="user-search"
+              placeholder="🔍  Search by name or email..."
+              oninput="filterUsers()"
+            />
+            <select
+              id="user-role-filter"
+              onchange="filterUsers()"
+              style="
+                padding: 0.65rem 1rem;
+                border: 1.5px solid var(--light);
+                border-radius: 50px;
+                background: var(--white);
+                font-size: 0.82rem;
+                color: var(--brown);
+                outline: none;
+                font-family: var(--font-body);
+              "
+            >
+              <option value="">All Roles</option>
+              <option value="customer">Customers</option>
+              <option value="artisan">Artisans</option>
+              <option value="admin">Admins</option>
+            </select>
+          </div>
+          <div id="users-table"><div class="spinner"></div></div>
+        </div>
+
+        <!-- Products -->
+        <div id="panel-products" style="display: none">
+          <h2 style="margin-bottom: 1.5rem">All Products</h2>
+          <div class="search-bar">
+            <input
+              type="text"
+              id="product-search"
+              placeholder="🔍  Search by title or state..."
+              oninput="filterProducts()"
+            />
+            <select
+              id="product-cat-filter"
+              onchange="filterProducts()"
+              style="
+                padding: 0.65rem 1rem;
+                border: 1.5px solid var(--light);
+                border-radius: 50px;
+                background: var(--white);
+                font-size: 0.82rem;
+                color: var(--brown);
+                outline: none;
+                font-family: var(--font-body);
+              "
+            >
+              <option value="">All Categories</option>
+              <option value="textiles">Textiles</option>
+              <option value="jewellery">Jewellery</option>
+              <option value="pottery">Pottery</option>
+              <option value="home-decor">Home Décor</option>
+              <option value="footwear-leather">Footwear</option>
+              <option value="paintings">Paintings</option>
+              <option value="carpets-rugs">Carpets</option>
+              <option value="toys-puppets">Toys</option>
+            </select>
+          </div>
+          <div id="products-table"><div class="spinner"></div></div>
+        </div>
+
+        <!-- Orders -->
+        <div id="panel-orders" style="display: none">
+          <h2 style="margin-bottom: 1.5rem">All Orders</h2>
+          <div class="search-bar">
+            <select
+              id="order-status-filter"
+              onchange="filterOrders()"
+              style="
+                padding: 0.65rem 1rem;
+                border: 1.5px solid var(--light);
+                border-radius: 50px;
+                background: var(--white);
+                font-size: 0.82rem;
+                color: var(--brown);
+                outline: none;
+                font-family: var(--font-body);
+              "
+            >
+              <option value="">All Statuses</option>
+              <option value="placed">Placed</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div id="orders-table"><div class="spinner"></div></div>
+        </div>
+
+        <!-- Verify Handmade -->
+        <div id="panel-verify" style="display: none">
+          <h2 style="margin-bottom: 0.5rem">Verify Handmade Products</h2>
+          <p style="font-size: 0.85rem; opacity: 0.65; margin-bottom: 1.5rem">
+            Products waiting for Verified Handmade badge. Review and approve
+            genuine handmade items.
+          </p>
+          <div id="verify-list"><div class="spinner"></div></div>
+        </div>
+
+        <!-- Approve Artisans Panel -->
+        <div id="panel-artisans" style="display: none">
+          <h2 style="margin-bottom: 0.5rem">Artisan Approvals</h2>
+          <p style="font-size: 0.85rem; opacity: 0.65; margin-bottom: 1.5rem">
+            Review and approve artisan accounts before they can list products.
+          </p>
+
+          <!-- Tabs -->
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem">
+            <button
+              id="tab-pending-btn"
+              onclick="switchArtisanTab('pending')"
+              style="
+                padding: 0.6rem 1.2rem;
+                border-radius: 50px;
+                border: 2px solid var(--maroon);
+                background: var(--maroon);
+                color: white;
+                font-size: 0.82rem;
+                cursor: pointer;
+                font-family: var(--font-body);
+              "
+            >
+              ⏳ Pending
+            </button>
+            <button
+              id="tab-approved-btn"
+              onclick="switchArtisanTab('approved')"
+              style="
+                padding: 0.6rem 1.2rem;
+                border-radius: 50px;
+                border: 2px solid var(--light);
+                background: var(--white);
+                color: var(--brown);
+                font-size: 0.82rem;
+                cursor: pointer;
+                font-family: var(--font-body);
+              "
+            >
+              ✅ Approved
+            </button>
+          </div>
+
+          <div id="artisans-list"><div class="spinner"></div></div>
+        </div>
+        <!-- Flagged Reviews Panel -->
+        <div id="panel-flagged" style="display: none">
+          <h2 style="margin-bottom: 0.5rem">Flagged Reviews</h2>
+          <p style="font-size: 0.85rem; opacity: 0.65; margin-bottom: 1.5rem">
+            Reviews reported by customers or artisans as inappropriate. Review
+            and decide to keep or remove.
+          </p>
+          <div id="flagged-reviews-list"><div class="spinner"></div></div>
+        </div>
+      </main>
+    </div>
+
+    <div style="height: 3rem"></div>
+
+    <script src="../js/utils.js"></script>
+    <script>
+      const loadFlaggedReviews = async () => {
+        const wrap = document.getElementById("flagged-reviews-list");
+        wrap.innerHTML = '<div class="spinner"></div>';
+        try {
+          const reviews = await api("/reviews/flagged", "GET", null, true);
+          if (!reviews.length) {
+            wrap.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🚩</div>
+          <h3>No flagged reviews</h3>
+          <p>All reviews are clean! No reports from users.</p>
+        </div>`;
+            return;
+          }
+          wrap.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        ${reviews
+          .map(
+            (r) => `
+          <div style="background:var(--white);border-radius:var(--radius);padding:1.5rem;box-shadow:0 4px 16px var(--shadow);border-left:4px solid var(--terracotta);">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+              <div style="flex:1;">
+                <!-- Product info -->
+                <div style="font-size:0.7rem;opacity:0.55;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.08em;">Product</div>
+                <div style="font-family:var(--font-head);font-size:1rem;font-weight:600;color:var(--maroon);margin-bottom:0.75rem;">
+                  ${r.product?.title || "Product deleted"}
+                </div>
+                <!-- Reviewer -->
+                <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.75rem;">
+                  <div style="width:32px;height:32px;border-radius:50%;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:0.9rem;">👤</div>
+                  <div>
+                    <div style="font-size:0.82rem;font-weight:600;">${r.customer?.name || "Customer"}</div>
+                    <div style="font-size:0.7rem;opacity:0.6;">${formatDate(r.createdAt)}</div>
+                  </div>
+                  <div style="margin-left:0.5rem;color:var(--mustard);">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</div>
+                </div>
+                <!-- Review text -->
+                <div style="background:var(--bg);border-radius:8px;padding:0.75rem;margin-bottom:0.75rem;font-size:0.85rem;line-height:1.7;font-style:italic;">
+                  "${r.comment || "No comment"}"
+                </div>
+                <!-- Flag reason -->
+                <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;">
+                  <span style="padding:0.2rem 0.7rem;background:rgba(201,106,69,0.1);color:var(--terracotta);border-radius:50px;font-weight:500;">
+                    ⚑ Reported by: ${r.flaggedBy?.name || "User"}
+                  </span>
+                  <span style="opacity:0.65;">Reason: ${r.flagReason || "Inappropriate content"}</span>
+                </div>
+              </div>
+              <!-- Action buttons -->
+              <div style="display:flex;flex-direction:column;gap:0.5rem;min-width:140px;">
+                <button class="btn btn-primary" style="font-size:0.78rem;padding:0.5rem 1rem;" 
+                  onclick="dismissFlag('${r._id}')">
+                  ✓ Keep Review
+                </button>
+                <button class="action-btn danger" style="padding:0.5rem 1rem;font-size:0.78rem;" 
+                  onclick="deleteReview('${r._id}')">
+                  🗑 Delete Review
+                </button>
+              </div>
+            </div>
+          </div>
+        `,
+          )
+          .join("")}
+      </div>`;
+        } catch (err) {
+          wrap.innerHTML =
+            '<p style="opacity:0.6;">Could not load flagged reviews.</p>';
+        }
+      };
+
+      const dismissFlag = async (reviewId) => {
+        try {
+          await api(`/reviews/${reviewId}/unflag`, "PUT", null, true);
+          showToast("Review kept — flag dismissed ✓", "success");
+          loadFlaggedReviews();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      };
+
+      const deleteReview = async (reviewId) => {
+        if (!confirm("Permanently delete this review?")) return;
+        try {
+          await api(`/reviews/${reviewId}`, "DELETE", null, true);
+          showToast("Review deleted ✓", "success");
+          loadFlaggedReviews();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      };
+      const user = getUser();
+      if (!user || user.role !== "admin") {
+        showToast("Admin access only", "error");
+        setTimeout(() => (window.location.href = "/pages/login.html"), 1000);
+      }
+      document.getElementById("admin-name").textContent = user?.name || "Admin";
+
+      let allUsers = [],
+        allProducts = [],
+        allOrders = [];
+
+      const showPanel = (name) => {
+        document
+          .querySelectorAll("main > div")
+          .forEach((p) => (p.style.display = "none"));
+        document.getElementById("panel-" + name).style.display = "block";
+        document
+          .querySelectorAll(".admin-nav a")
+          .forEach((a) => a.classList.remove("active"));
+        const panels = [
+          "overview",
+          "users",
+          "products",
+          "orders",
+          "verify",
+          "artisans",
+          "flagged",
+        ];
+        const links = document.querySelectorAll(".admin-nav a");
+        const idx = panels.indexOf(name);
+        if (links[idx]) links[idx].classList.add("active");
+        if (name === "overview") loadOverview();
+        if (name === "users") loadUsers();
+        if (name === "products") loadProducts();
+        if (name === "orders") loadOrders();
+        if (name === "verify") loadVerify();
+        if (name === "artisans") loadArtisans("pending");
+        if (name === "flagged") loadFlaggedReviews();
+      };
+
+      const loadOverview = async () => {
+        try {
+          const [productsData, ordersData, artisansData] = await Promise.all([
+            api("/products?limit=1000", "GET", null, false),
+            api("/orders", "GET", null, true),
+            api("/users/artisans", "GET", null, true),
+          ]);
+
+          const products = productsData.products || [];
+          const orders = ordersData || [];
+          const artisans = artisansData || [];
+
+          // Update all stat cards
+          document.getElementById("ov-products").textContent = products.length;
+          document.getElementById("ov-orders").textContent = orders.length;
+          document.getElementById("ov-artisans").textContent = artisans.length;
+
+          // Total users = artisans + customers (derive customers from orders)
+          const customerMap = {};
+          orders.forEach((o) => {
+            if (o.customer) customerMap[o.customer._id || o.customer] = true;
+          });
+          const totalUsers = artisans.length + Object.keys(customerMap).length;
+          document.getElementById("ov-users").textContent = totalUsers;
+
+          // Revenue
+          const revenue = orders.reduce((s, o) => s + (o.totalAmount || 0), 0);
+          document.getElementById("ov-revenue").textContent =
+            formatPrice(revenue);
+
+          // Pending verifications
+          const pending = products.filter((p) => !p.isHandmadeVerified).length;
+          document.getElementById("ov-pending").textContent = pending;
+
+          // Recent orders table
+          renderAdminOrdersTable(orders.slice(0, 6), "ov-recent-orders", false);
+
+          // Recent products table
+          renderAdminProductsTable(
+            products.slice(0, 6),
+            "ov-recent-products",
+            false,
+          );
+        } catch (err) {
+          console.error("Overview error:", err);
+          document.getElementById("ov-recent-orders").innerHTML =
+            '<p style="opacity:0.6;font-size:0.85rem;">Could not load data.</p>';
+          document.getElementById("ov-recent-products").innerHTML =
+            '<p style="opacity:0.6;font-size:0.85rem;">Could not load data.</p>';
+          // Set dashes for failed stats
+          ["ov-users", "ov-artisans"].forEach((id) => {
+            document.getElementById(id).textContent = "—";
+          });
+        }
+      };
+
+      const loadUsers = async () => {
+        document.getElementById("users-table").innerHTML =
+          '<div class="spinner"></div>';
+        try {
+          const [orders, productsData] = await Promise.all([
+            api("/orders", "GET", null, true),
+            api("/products?limit=1000", "GET", null, false),
+          ]);
+          const customerMap = {},
+            artisanMap = {};
+          orders.forEach((o) => {
+            if (o.customer)
+              customerMap[o.customer._id || o.customer] = o.customer;
+          });
+          (productsData.products || []).forEach((p) => {
+            if (p.artisan) artisanMap[p.artisan._id || p.artisan] = p.artisan;
+          });
+          allUsers = [
+            ...Object.values(customerMap).map((u) => ({
+              ...u,
+              role: "customer",
+            })),
+            ...Object.values(artisanMap).map((u) => ({
+              ...u,
+              role: "artisan",
+            })),
+          ];
+          document.getElementById("ov-users").textContent = allUsers.length;
+          document.getElementById("ov-artisans").textContent =
+            Object.values(artisanMap).length;
+          renderUsersTable(allUsers);
+        } catch (e) {
+          document.getElementById("users-table").innerHTML =
+            '<p style="opacity:0.6;">Could not load users.</p>';
+        }
+      };
+
+      const filterUsers = () => {
+        const keyword = document
+          .getElementById("user-search")
+          .value.toLowerCase();
+        const role = document.getElementById("user-role-filter").value;
+        renderUsersTable(
+          allUsers.filter((u) => {
+            const matchName =
+              (u.name || "").toLowerCase().includes(keyword) ||
+              (u.email || "").toLowerCase().includes(keyword);
+            return matchName && (role ? u.role === role : true);
+          }),
+        );
+      };
+
+      const renderUsersTable = (users) => {
+        const wrap = document.getElementById("users-table");
+        if (!users.length) {
+          wrap.innerHTML =
+            '<div class="empty-state"><div class="icon">👥</div><h3>No users found</h3></div>';
+          return;
+        }
+        wrap.innerHTML = `<div style="overflow-x:auto;"><table class="data-table">
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>State</th><th>Shop Name</th></tr></thead>
+        <tbody>${users
+          .map(
+            (u) => `<tr>
+          <td style="font-weight:600;font-size:0.85rem;">${u.name || "—"}</td>
+          <td style="font-size:0.8rem;opacity:0.75;">${u.email || "—"}</td>
+          <td><span class="status-badge ${u.role === "artisan" ? "status-processing" : u.role === "admin" ? "status-delivered" : "status-shipped"}">${u.role}</span></td>
+          <td style="font-size:0.8rem;">${u.state || "—"}</td>
+          <td style="font-size:0.8rem;">${u.shopName || "—"}</td>
+        </tr>`,
+          )
+          .join("")}</tbody></table></div>`;
+      };
+
+      const loadProducts = async () => {
+        document.getElementById("products-table").innerHTML =
+          '<div class="spinner"></div>';
+        try {
+          const data = await api("/products?limit=1000", "GET", null, false);
+          allProducts = data.products || [];
+          renderAdminProductsTable(allProducts, "products-table", true);
+        } catch (e) {
+          document.getElementById("products-table").innerHTML =
+            '<p style="opacity:0.6;">Could not load products.</p>';
+        }
+      };
+
+      const filterProducts = () => {
+        const keyword = document
+          .getElementById("product-search")
+          .value.toLowerCase();
+        const cat = document.getElementById("product-cat-filter").value;
+        renderAdminProductsTable(
+          allProducts.filter((p) => {
+            const matchText =
+              (p.title || "").toLowerCase().includes(keyword) ||
+              (p.state || "").toLowerCase().includes(keyword);
+            return matchText && (cat ? p.category === cat : true);
+          }),
+          "products-table",
+          true,
+        );
+      };
+
+      const renderAdminProductsTable = (products, containerId, showActions) => {
+        const wrap = document.getElementById(containerId);
+        if (!products.length) {
+          wrap.innerHTML =
+            '<div class="empty-state"><div class="icon">🏺</div><h3>No products found</h3></div>';
+          return;
+        }
+        wrap.innerHTML = `<div style="overflow-x:auto;"><table class="data-table">
+        <thead><tr><th>Product</th><th>Artisan</th><th>Category</th><th>State</th><th>Price</th><th>Stock</th><th>Rating</th><th>Verified</th>${showActions ? "<th>Actions</th>" : ""}</tr></thead>
+        <tbody>${products
+          .map(
+            (p) => `<tr>
+          <td><div style="display:flex;align-items:center;gap:0.6rem;">
+            <div style="width:38px;height:38px;border-radius:6px;overflow:hidden;background:var(--light);flex-shrink:0;">
+              <img src="${p.images?.[0] || ""}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+            </div>
+            <span style="font-size:0.82rem;font-weight:600;color:var(--maroon);">${p.title}</span>
+          </div></td>
+          <td style="font-size:0.78rem;">${p.artisan?.shopName || p.artisan?.name || "—"}</td>
+          <td style="font-size:0.78rem;">${p.category?.replace("-", " ") || "—"}</td>
+          <td style="font-size:0.78rem;">${p.state || "—"}</td>
+          <td style="font-family:var(--font-head);font-weight:600;">${formatPrice(p.price)}</td>
+          <td>${p.stock}</td>
+          <td>${p.averageRating || 0} ★</td>
+          <td>${p.isHandmadeVerified ? '<span class="status-badge status-delivered">✓ Verified</span>' : '<span class="status-badge status-placed">Pending</span>'}</td>
+          ${
+            showActions
+              ? `<td><div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+            ${!p.isHandmadeVerified ? `<button class="action-btn success" onclick="verifyProduct('${p._id}')">✓ Verify</button>` : ""}
+            <button class="action-btn danger" onclick="deleteProduct('${p._id}')">Delete</button>
+          </div></td>`
+              : ""
+          }
+        </tr>`,
+          )
+          .join("")}</tbody></table></div>`;
+      };
+
+      const verifyProduct = async (id) => {
+        try {
+          await api("/products/" + id + "/verify", "PUT", null, true);
+          showToast("Product verified! ✓", "success");
+          loadProducts();
+          loadVerify();
+        } catch (e) {
+          showToast(e.message, "error");
+        }
+      };
+
+      const deleteProduct = async (id) => {
+        if (!confirm("Remove this product?")) return;
+        try {
+          await api("/products/" + id, "DELETE", null, true);
+          showToast("Product removed", "success");
+          loadProducts();
+        } catch (e) {
+          showToast(e.message, "error");
+        }
+      };
+
+      const loadOrders = async () => {
+        document.getElementById("orders-table").innerHTML =
+          '<div class="spinner"></div>';
+        try {
+          allOrders = await api("/orders", "GET", null, true);
+          renderAdminOrdersTable(allOrders, "orders-table", true);
+        } catch (e) {
+          document.getElementById("orders-table").innerHTML =
+            '<p style="opacity:0.6;">Could not load orders.</p>';
+        }
+      };
+
+      const filterOrders = () => {
+        const status = document.getElementById("order-status-filter").value;
+        renderAdminOrdersTable(
+          status
+            ? allOrders.filter((o) => o.orderStatus === status)
+            : allOrders,
+          "orders-table",
+          true,
+        );
+      };
+
+      const renderAdminOrdersTable = (orders, containerId, showActions) => {
+        const wrap = document.getElementById(containerId);
+        if (!orders.length) {
+          wrap.innerHTML =
+            '<div class="empty-state"><div class="icon">📦</div><h3>No orders found</h3></div>';
+          return;
+        }
+        wrap.innerHTML = `<div style="overflow-x:auto;"><table class="data-table">
+        <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th>${showActions ? "<th>Update</th>" : ""}</tr></thead>
+        <tbody>${orders
+          .map(
+            (o) => `<tr>
+          <td style="font-size:0.72rem;font-family:monospace;opacity:0.7;">${o._id.slice(-8)}</td>
+          <td style="font-size:0.82rem;">${o.customer?.name || "—"}</td>
+          <td>${o.items?.length || 0} item(s)</td>
+          <td style="font-family:var(--font-head);font-weight:600;">${formatPrice(o.totalAmount)}</td>
+          <td><span class="status-badge ${o.paymentStatus === "paid" ? "status-delivered" : "status-placed"}">${o.paymentMethod?.toUpperCase()} · ${o.paymentStatus}</span></td>
+          <td><span class="status-badge status-${o.orderStatus}">${o.orderStatus}</span></td>
+          <td style="font-size:0.78rem;">${formatDate(o.createdAt)}</td>
+          ${
+            showActions
+              ? `<td><select onchange="updateOrderStatus('${o._id}',this.value)" style="font-size:0.75rem;padding:0.3rem 0.5rem;border-radius:6px;border:1px solid var(--light);background:var(--bg);cursor:pointer;font-family:var(--font-body);">
+            <option value="">Update</option>
+            <option value="placed">Placed</option><option value="processing">Processing</option>
+            <option value="shipped">Shipped</option><option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select></td>`
+              : ""
+          }
+        </tr>`,
+          )
+          .join("")}</tbody></table></div>`;
+      };
+
+      const updateOrderStatus = async (id, status) => {
+        if (!status) return;
+        try {
+          await api(
+            "/orders/" + id + "/status",
+            "PUT",
+            { orderStatus: status },
+            true,
+          );
+          showToast("Order updated", "success");
+          loadOrders();
+        } catch (e) {
+          showToast(e.message, "error");
+        }
+      };
+
+      const loadVerify = async () => {
+        const wrap = document.getElementById("verify-list");
+        wrap.innerHTML = '<div class="spinner"></div>';
+        try {
+          const data = await api("/products?limit=1000", "GET", null, false);
+          const products = (data.products || []).filter(
+            (p) => !p.isHandmadeVerified,
+          );
+          if (!products.length) {
+            wrap.innerHTML =
+              '<div class="empty-state"><div class="icon">✅</div><h3>All caught up!</h3><p>No products waiting for verification.</p></div>';
+            return;
+          }
+          wrap.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;">
+          ${products
+            .map(
+              (p) => `
+            <div style="background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 16px var(--shadow);">
+              <div style="height:180px;overflow:hidden;background:var(--light);">
+                <img src="${p.images?.[0] || ""}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/300x180/F8EFE3/6B0F1A?text=Craft'">
+              </div>
+              <div style="padding:1.2rem;">
+                <div style="font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--terracotta);margin-bottom:0.4rem;">${p.category?.replace("-", " ")}</div>
+                <div style="font-family:var(--font-head);font-size:1.05rem;font-weight:600;color:var(--maroon);margin-bottom:0.3rem;">${p.title}</div>
+                <div style="font-size:0.75rem;opacity:0.6;margin-bottom:0.5rem;">by ${p.artisan?.shopName || p.artisan?.name || "Artisan"} · ${p.state}</div>
+                <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--maroon);margin-bottom:0.75rem;">${formatPrice(p.price)}</div>
+                ${
+                  p.craftStory
+                    ? `
+                  <div style="background:var(--bg);border-radius:8px;padding:0.8rem;margin-bottom:0.75rem;border-left:3px solid var(--terracotta);">
+                    <div style="font-size:0.65rem;font-weight:600;color:var(--terracotta);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.08em;">✍ Craft Story</div>
+                    <p style="font-size:0.78rem;opacity:0.8;line-height:1.7;font-style:italic;">${p.craftStory.slice(0, 150)}${p.craftStory.length > 150 ? "..." : ""}</p>
+                  </div>`
+                    : `
+                  <div style="background:rgba(216,160,49,0.1);border-radius:8px;padding:0.6rem 0.8rem;margin-bottom:0.75rem;">
+                    <p style="font-size:0.75rem;color:var(--mustard);">⚠ No craft story provided</p>
+                  </div>`
+                }
+                <div style="display:flex;gap:0.6rem;">
+                  <button class="btn btn-primary" style="flex:1;font-size:0.8rem;padding:0.6rem;" onclick="verifyProduct('${p._id}')">✓ Approve Badge</button>
+                  <button class="action-btn danger" style="padding:0.6rem 0.9rem;" onclick="deleteProduct('${p._id}')">Remove</button>
+                </div>
+              </div>
+            </div>`,
+            )
+            .join("")}
+        </div>`;
+        } catch (e) {
+          wrap.innerHTML =
+            '<p style="opacity:0.6;">Could not load products.</p>';
+        }
+      };
+
+      let currentArtisanTab = "pending";
+
+      const switchArtisanTab = (tab) => {
+        currentArtisanTab = tab;
+        // Update button styles
+        document.getElementById("tab-pending-btn").style.background =
+          tab === "pending" ? "var(--maroon)" : "var(--white)";
+        document.getElementById("tab-pending-btn").style.color =
+          tab === "pending" ? "white" : "var(--brown)";
+        document.getElementById("tab-pending-btn").style.borderColor =
+          tab === "pending" ? "var(--maroon)" : "var(--light)";
+        document.getElementById("tab-approved-btn").style.background =
+          tab === "approved" ? "var(--maroon)" : "var(--white)";
+        document.getElementById("tab-approved-btn").style.color =
+          tab === "approved" ? "white" : "var(--brown)";
+        document.getElementById("tab-approved-btn").style.borderColor =
+          tab === "approved" ? "var(--maroon)" : "var(--light)";
+        loadArtisans(tab);
+      };
+
+      const loadArtisans = async (tab) => {
+        const wrap = document.getElementById("artisans-list");
+        wrap.innerHTML = '<div class="spinner"></div>';
+        try {
+          const artisans = await api(
+            `/users/artisans?status=${tab}`,
+            "GET",
+            null,
+            true,
+          );
+
+          if (!artisans.length) {
+            wrap.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">👨‍🎨</div>
+          <h3>No ${tab} artisans</h3>
+          <p>${tab === "pending" ? "All artisan accounts have been reviewed." : "No artisans approved yet."}</p>
+        </div>`;
+            return;
+          }
+
+          wrap.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;">
+        ${artisans
+          .map(
+            (a) => `
+          <div style="background:var(--white);border-radius:var(--radius);padding:1.5rem;box-shadow:0 4px 16px var(--shadow);">
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
+              <div style="width:52px;height:52px;border-radius:50%;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">
+                👩‍🎨
+              </div>
+              <div>
+                <div style="font-family:var(--font-head);font-size:1.05rem;font-weight:600;color:var(--maroon);">${a.name || "—"}</div>
+                <div style="font-size:0.75rem;opacity:0.6;">${a.email || "—"}</div>
+                <div style="font-size:0.72rem;color:var(--terracotta);margin-top:0.2rem;">${a.shopName || "No shop name"}</div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;padding:0.75rem;background:var(--bg);border-radius:8px;font-size:0.8rem;">
+              <div>📍 <strong>State:</strong> ${a.state || "Not provided"}</div>
+              <div>📞 <strong>Phone:</strong> ${a.phone || "Not provided"}</div>
+              <div>🏪 <strong>Shop:</strong> ${a.shopName || "Not provided"}</div>
+              ${a.bio ? `<div>📝 <strong>Bio:</strong> ${a.bio.slice(0, 100)}${a.bio.length > 100 ? "..." : ""}</div>` : ""}
+              <div>📅 <strong>Registered:</strong> ${formatDate(a.createdAt)}</div>
+              <div>
+                <strong>Status:</strong> 
+                <span class="status-badge ${a.isApproved ? "status-delivered" : "status-placed"}">
+                  ${a.isApproved ? "✅ Approved" : "⏳ Pending"}
+                </span>
+              </div>
+            </div>
+
+            ${
+              !a.isApproved
+                ? `
+            <div style="display:flex;gap:0.6rem;">
+              <button class="btn btn-primary" style="flex:1;font-size:0.8rem;padding:0.6rem;"
+                onclick="approveArtisan('${a._id}')">
+                ✅ Approve
+              </button>
+              <button class="action-btn danger" style="padding:0.6rem 0.9rem;"
+                onclick="rejectArtisan('${a._id}')">
+                ✕ Reject
+              </button>
+            </div>`
+                : `
+            <div style="text-align:center;padding:0.6rem;background:rgba(47,143,131,0.1);border-radius:8px;font-size:0.8rem;color:var(--emerald);font-weight:500;">
+              ✅ Approved Artisan
+            </div>`
+            }
+          </div>
+        `,
+          )
+          .join("")}
+      </div>`;
+        } catch (err) {
+          wrap.innerHTML =
+            '<p style="opacity:0.6;">Could not load artisans. Make sure backend is running.</p>';
+        }
+      };
+
+      const approveArtisan = async (userId) => {
+        try {
+          await api(`/users/${userId}/approve`, "PUT", null, true);
+          showToast("Artisan approved! ✅", "success");
+          loadArtisans(currentArtisanTab);
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      };
+
+      const rejectArtisan = async (userId) => {
+        if (!confirm("Reject and delete this artisan account?")) return;
+        try {
+          await api(`/users/${userId}/reject`, "DELETE", null, true);
+          showToast("Artisan rejected", "success");
+          loadArtisans(currentArtisanTab);
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      };
+
+      showPanel("overview");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bag & Checkout — CRAFT BAZAAR</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <!-- ── Search Overlay ──────────────────────────────────── -->
+  <div class="search-overlay" id="search-overlay">
+    <input
+      type="text"
+      placeholder="WHAT ARE YOU LOOKING FOR?"
+      id="search-input-overlay"
+      onkeydown="if (event.key === 'Enter') doSearch();"
+    />
+    <button class="search-close" onclick="toggleSearch()"></button>
+  </div>
+  <!-- ── Sidebar Overlay ─────────────────────────────────── -->
+  <div
+    class="sidebar-overlay"
+    id="sidebar-overlay"
+    onclick="toggleSidebar()"
+  ></div>
+  <!-- ── Sidebar Menu ────────────────────────────────────── -->
+  <div class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-logo">CRAFT BAZAAR</div>
+    <nav>
+      <a href="/index.html" class="sidebar-nav-item">Home <span>→</span></a>
+      <a href="/pages/explore.html" class="sidebar-nav-item"
+        >Explore <span>→</span></a
+      >
+      <a href="/pages/states.html" class="sidebar-nav-item"
+        >States <span>→</span></a
+      >
+      <a href="/pages/categories.html" class="sidebar-nav-item"
+        >Categories <span>→</span></a
+      >
+      <a href="/pages/about.html" class="sidebar-nav-item"
+        >About <span>→</span></a
+      >
+      <button
+        class="btn btn-outline"
+        style="margin-top: 1.2rem"
+        onclick="logout()"
+      >
+        Log Out
+      </button>
+    </nav>
+    <p class="sidebar-tagline">
+      A curated marketplace celebrating authentic Indian handicrafts from
+      artisans across every state of India.
+    </p>
+  </div>
+  <!-- ── Top Navbar ──────────────────────────────────────── -->
+  <nav class="zara-nav" id="zara-nav">
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()">
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-right">
+      <a class="nav-right-item" onclick="toggleSearch()">Search</a>
+      <a
+        class="nav-right-item"
+        href="/pages/cart.html"
+        style="position: relative"
+        >Bag
+        <span class="cart-count-badge cart-badge" style="display: none">0</span>
+      </a>
+      <a class="nav-right-item" id="nav-login-link" href="/pages/login.html"
+        >Log In</a
+      >
+      <a
+        class="nav-right-item"
+        id="nav-profile-link"
+        href="/pages/dashboard.html"
+        style="display: none"
+        >Account</a
+      >
+    </div>
+  </nav>
+  <body class="page-body">
+    <nav class="navbar scrolled">
+      <div class="container">
+        <div class="nav-inner">
+          <a class="nav-logo" href="/index.html">CRAFT BAZAAR</a>
+          <!-- <ul class="nav-links"> <li><a href="/index.html">Home</a></li> <li><a href="/pages/products.html">Explore</a></li> </ul> -->
+          <ul class="nav-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/pages/explore.html">Explore</a></li>
+            <li><a href="/pages/states.html">States</a></li>
+            <li><a href="/pages/categories.html">Categories</a></li>
+            <li><a href="/pages/about.html">About</a></li>
+          </ul>
+          <div class="nav-actions">
+            <a
+              class="nav-icon search-icon"
+              href="/pages/products.html"
+              title="Search"
+            >
+              <i class="ri-search-line"></i>
+            </a>
+            <a class="nav-icon" href="/pages/cart.html" title="Cart">
+              <i class="ri-shopping-cart-line"></i>
+              <span class="badge cart-badge" style="display: none">0</span>
+            </a>
+            <a
+              class="nav-icon"
+              id="auth-link"
+              href="/pages/login.html"
+              title="Login"
+            >
+              <i class="ri-user-line"></i>
+            </a>
+            <a
+              class="nav-icon"
+              id="profile-link"
+              href="/pages/dashboard.html"
+              title="Profile"
+              style="display: none"
+            >
+              <i class="ri-user-line"></i>
+            </a>
+            <button class="hamburger" aria-label="Menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container cart-wrap">
+      <!-- Left: Cart Items -->
+      <div>
+        <div class="breadcrumb" style="margin-bottom: 1.5rem">
+          <a href="/index.html">Home</a>
+          <span>›</span>
+          <span>Bag</span>
+        </div>
+        <h1 style="margin-bottom: 1.5rem">Your Bag</h1>
+        <!-- Step indicator -->
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.78rem;
+          "
+        >
+          <span
+            id="step-cart-label"
+            style="font-weight: 600; color: var(--maroon)"
+            >1. Bag</span
+          >
+          <span style="opacity: 0.3">──────</span>
+          <span id="step-checkout-label" style="opacity: 0.4">2. Checkout</span>
+          <span style="opacity: 0.3">──────</span>
+          <span id="step-confirm-label" style="opacity: 0.4">3. Confirmed</span>
+        </div>
+        <!-- Step 1: Cart -->
+        <div id="step-cart">
+          <div id="cart-items-list"></div>
+          <div id="cart-empty" style="display: none">
+            <div class="empty-state">
+              <div class="icon"></div>
+              <h3>Your bag is empty</h3>
+              <p>
+                Discover beautiful handmade crafts and add them to your bag.
+              </p>
+              <a
+                href="/pages/products.html"
+                class="btn btn-primary"
+                style="margin-top: 1rem"
+                >Explore Crafts →</a
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Step 2: Checkout -->
+        <div id="step-checkout" style="display: none">
+          <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem">
+            Shipping Details
+          </h2>
+          <div
+            style="
+              background: var(--white);
+              border-radius: var(--radius);
+              padding: 1.8rem;
+              box-shadow: 0 4px 16px var(--shadow);
+            "
+          >
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem"
+            >
+              <div class="form-group" style="grid-column: 1/-1">
+                <label for="s-name">Full Name *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="s-name"
+                  placeholder="Recipient full name"
+                />
+              </div>
+              <div class="form-group" style="grid-column: 1/-1">
+                <label for="s-address">Address *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="s-address"
+                  placeholder="House no, Street, Area"
+                />
+              </div>
+              <div class="form-group">
+                <label for="s-city">City *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="s-city"
+                  placeholder="City"
+                />
+              </div>
+              <div class="form-group">
+                <label for="s-state">State *</label>
+                <select class="form-control" id="s-state">
+                  <option value="">Select state</option>
+                  <option>Rajasthan</option>
+                  <option>Gujarat</option>
+                  <option>Maharashtra</option>
+                  <option>Delhi</option>
+                  <option>Karnataka</option>
+                  <option>Tamil Nadu</option>
+                  <option>West Bengal</option>
+                  <option>Uttar Pradesh</option>
+                  <option>Madhya Pradesh</option>
+                  <option>Punjab</option>
+                  <option>Haryana</option>
+                  <option>Telangana</option>
+                  <option>Kerala</option>
+                  <option>Odisha</option>
+                  <option>Bihar</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="s-pincode">Pincode *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="s-pincode"
+                  placeholder="6-digit pincode"
+                  maxlength="6"
+                />
+              </div>
+              <div class="form-group">
+                <label for="s-phone">Phone *</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="s-phone"
+                  placeholder="+91 98765 43210"
+                />
+              </div>
+            </div>
+            <h3 style="margin: 1.5rem 0 1rem; font-size: 1.1rem">
+              Payment Method
+            </h3>
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap">
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                  cursor: pointer;
+                  font-size: 0.85rem;
+                "
+              >
+                <input type="radio" name="payment" value="cod" checked />Cash on
+                Delivery
+              </label>
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                  cursor: pointer;
+                  font-size: 0.85rem;
+                "
+              >
+                <input type="radio" name="payment" value="online" />Online
+                Payment (Mock)
+              </label>
+            </div>
+          </div>
+          <div style="display: flex; gap: 1rem; margin-top: 1.5rem">
+            <button class="btn btn-outline" onclick="showStep('cart')">
+              ← Back to Bag
+            </button>
+            <button class="btn btn-primary" onclick="placeOrderHandler()">
+              Place Order →
+            </button>
+          </div>
+        </div>
+        <!-- Step 3: Confirmed -->
+        <div
+          id="step-confirm"
+          style="display: none; text-align: center; padding: 3rem 0"
+        >
+          <div style="font-size: 4rem; margin-bottom: 1rem"></div>
+          <h2 style="color: var(--emerald); margin-bottom: 0.75rem">
+            Order Placed Successfully!
+          </h2>
+          <p style="opacity: 0.75; font-size: 0.9rem; margin-bottom: 0.5rem">
+            Thank you for supporting Indian artisans.
+          </p>
+          <p style="opacity: 0.65; font-size: 0.82rem; margin-bottom: 2rem">
+            Order ID: <strong id="confirmed-order-id"></strong>
+          </p>
+          <div
+            style="
+              display: flex;
+              gap: 1rem;
+              justify-content: center;
+              flex-wrap: wrap;
+            "
+          >
+            <a href="/pages/products.html" class="btn btn-primary"
+              >Continue Shopping</a
+            >
+            <a href="/pages/profile.html" class="btn btn-outline"
+              >View My Orders</a
+            >
+          </div>
+        </div>
+      </div>
+      <!-- Right: Order Summary -->
+      <div id="summary-panel">
+        <div class="order-summary">
+          <h3>Order Summary</h3>
+          <div id="summary-items"></div>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="summary-subtotal">₹0</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span style="color: var(--emerald)">Free</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="summary-total">₹0</span>
+          </div>
+          <button
+            class="btn btn-primary"
+            style="width: 100%; margin-top: 1.2rem"
+            id="proceed-btn"
+            onclick="showStep('checkout')"
+          >
+            Proceed to Checkout →
+          </button>
+          <a
+            href="/pages/products.html"
+            style="
+              display: block;
+              text-align: center;
+              font-size: 0.78rem;
+              opacity: 0.6;
+              margin-top: 1rem;
+            "
+            >← Continue Shopping</a
+          >
+        </div>
+      </div>
+    </div>
+    <div style="height: 4rem"></div>
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom" style="border-top: none; padding-top: 0">
+          <span>© 2026 CRAFT BAZAAR. Made for India's artisans.</span>
+        </div>
+      </div>
+    </footer>
+    <script src="../js/utils.js"></script>
+
+    <script>
+      const showStep = (step) => {
+        ["cart", "checkout", "confirm"].forEach((s) => {
+          document.getElementById(`step-${s}`).style.display =
+            s === step ? "block" : "none";
+
+          const lbl = document.getElementById(`step-${s}-label`);
+
+          if (lbl) {
+            lbl.style.opacity = s === step ? "1" : "0.4";
+            lbl.style.fontWeight = s === step ? "600" : "400";
+            lbl.style.color = s === step ? "var(--maroon)" : "var(--brown)";
+          }
+        });
+
+        const btn = document.getElementById("proceed-btn");
+
+        if (btn) btn.style.display = step === "cart" ? "block" : "none";
+      };
+
+      const renderCart = () => {
+        const cart = getCart();
+
+        const list = document.getElementById("cart-items-list");
+        const empty = document.getElementById("cart-empty");
+
+        if (!cart.length) {
+          list.style.display = "none";
+          empty.style.display = "block";
+          document.getElementById("summary-panel").style.display = "none";
+          return;
+        }
+
+        list.style.display = "block";
+        empty.style.display = "none";
+        document.getElementById("summary-panel").style.display = "block";
+
+        list.innerHTML = cart
+          .map(
+            (item) => `
+        <div class="cart-item">
+
+            <div class="cart-item-img">
+                <img
+                    src="${item.images?.[0] || ""}"
+                    alt="${item.title}"
+                    onerror="this.src='https://via.placeholder.com/90/F8EFE3/6B0F1A?text=Craft'"
+                >
+            </div>
+
+            <div class="cart-item-info">
+
+                <div class="cart-item-title">
+                    ${item.title}
+                </div>
+
+                <div class="cart-item-artisan">
+                    ${item.state || ""}
+                </div>
+
+                <div style="display:flex;align-items:center;gap:1rem;margin-top:0.5rem;">
+
+                    <div class="qty-control">
+                        <button
+                            class="qty-btn"
+                            onclick="updateQty('${item._id}', ${item.quantity - 1})"
+                        >
+                            −
+                        </button>
+
+                        <span class="qty-num">
+                            ${item.quantity}
+                        </span>
+
+                        <button
+                            class="qty-btn"
+                            onclick="updateQty('${item._id}', ${item.quantity + 1})"
+                        >
+                            +
+                        </button>
+                    </div>
+
+                    <div class="cart-item-price">
+                        ${formatPrice(item.price * item.quantity)}
+                    </div>
+
+                </div>
+
+                <button
+                    class="cart-item-remove"
+                    onclick="handleRemove('${item._id}')"
+                >
+                    Remove
+                </button>
+
+            </div>
+
+        </div>
+    `,
+          )
+          .join("");
+
+        const total = getCartTotal();
+
+        document.getElementById("summary-subtotal").textContent =
+          formatPrice(total);
+
+        document.getElementById("summary-total").textContent =
+          formatPrice(total);
+
+        document.getElementById("summary-items").innerHTML = cart
+          .map(
+            (i) => `
+        <div class="summary-row">
+
+            <span style="
+                max-width:180px;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+            ">
+                ${i.title} ×${i.quantity}
+            </span>
+
+            <span>
+                ${formatPrice(i.price * i.quantity)}
+            </span>
+
+        </div>
+    `,
+          )
+          .join("");
+      };
+
+      const updateQty = (id, qty) => {
+        if (qty < 1) {
+          handleRemove(id);
+          return;
+        }
+
+        updateCartQty(id, qty);
+        renderCart();
+      };
+
+      const handleRemove = (id) => {
+        removeFromCart(id);
+        renderCart();
+        showToast("Item removed");
+      };
+
+      const placeOrderHandler = async () => {
+        if (!isLoggedIn()) {
+          showToast("Please log in to place an order", "error");
+
+          setTimeout(() => {
+            window.location.href = "/pages/login.html";
+          }, 1200);
+
+          return;
+        }
+
+        const user = getUser();
+
+        if (user.role === "artisan") {
+          showToast("Use a customer account to place orders", "error");
+          return;
+        }
+
+        const name = document.getElementById("s-name").value.trim();
+        const address = document.getElementById("s-address").value.trim();
+        const city = document.getElementById("s-city").value.trim();
+        const state = document.getElementById("s-state").value;
+        const pincode = document.getElementById("s-pincode").value.trim();
+        const phone = document.getElementById("s-phone").value.trim();
+
+        if (!name || !address || !city || !state || !pincode || !phone) {
+          showToast("Please fill all shipping fields", "error");
+          return;
+        }
+
+        if (pincode.length !== 6 || isNaN(pincode)) {
+          showToast("Enter a valid 6-digit pincode", "error");
+          return;
+        }
+
+        const paymentMethod = document.querySelector(
+          'input[name="payment"]:checked',
+        ).value;
+
+        const cart = getCart();
+
+        const btn = document.querySelector("#step-checkout .btn-primary");
+
+        btn.textContent = "Placing order...";
+        btn.disabled = true;
+
+        try {
+          const order = await api(
+            "/orders",
+            "POST",
+            {
+              items: cart.map((i) => ({
+                product: i._id,
+                quantity: i.quantity,
+              })),
+
+              shippingAddress: {
+                fullName: name,
+                addressLine: address,
+                city,
+                state,
+                pincode,
+                phone,
+              },
+
+              paymentMethod,
+            },
+            true,
+          );
+
+          clearCart();
+
+          document.getElementById("confirmed-order-id").textContent = order._id;
+
+          showStep("confirm");
+
+          showToast("Order placed! ", "success");
+        } catch (err) {
+          showToast(err.message, "error");
+
+          btn.textContent = "Place Order →";
+          btn.disabled = false;
+        }
+      };
+
+      renderCart();
+      showStep("cart");
+    </script>
+  </body>
+</html>

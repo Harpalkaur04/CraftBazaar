@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>About — CRAFT BAZAAR</title>
+    <link href="../css/style.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <!-- ── Search Overlay ──────────────────────────────────── -->
+  <div class="search-overlay" id="search-overlay">
+    <input
+      type="text"
+      placeholder="WHAT ARE YOU LOOKING FOR?"
+      id="search-input-overlay"
+      onkeydown="if (event.key === 'Enter') doSearch();"
+    />
+    <button class="search-close" onclick="toggleSearch()">✕</button>
+  </div>
+  <!-- ── Sidebar Overlay ─────────────────────────────────── -->
+  <div
+    class="sidebar-overlay"
+    id="sidebar-overlay"
+    onclick="toggleSidebar()"
+  ></div>
+  <!-- ── Sidebar Menu ────────────────────────────────────── -->
+  <div class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-logo">CRAFT BAZAAR</div>
+    <nav>
+      <a class="sidebar-nav-item" href="/index.html">
+        Home
+        <span> → </span>
+      </a>
+      <a class="sidebar-nav-item" href="/pages/explore.html">
+        Explore
+        <span> → </span>
+      </a>
+      <a class="sidebar-nav-item" href="/pages/states.html">
+        States
+        <span> → </span>
+      </a>
+      <a class="sidebar-nav-item" href="/pages/categories.html">
+        Categories
+        <span> → </span>
+      </a>
+      <a class="sidebar-nav-item" href="/pages/about.html">
+        About
+        <span> → </span>
+      </a>
+      <button
+        class="btn btn-outline"
+        onclick="logout()"
+        style="margin-top: 1.2rem"
+      >
+        Log Out
+      </button>
+    </nav>
+    <p class="sidebar-tagline">
+      A curated marketplace celebrating authentic Indian handicrafts from
+      artisans across every state of India.
+    </p>
+  </div>
+  <!-- ── Top Navbar ──────────────────────────────────────── -->
+  <nav class="zara-nav" id="zara-nav">
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()">
+      <span> </span>
+      <span> </span>
+    </button>
+    <div class="nav-right">
+      <a class="nav-right-item" onclick="toggleSearch()"> Search </a>
+      <a
+        class="nav-right-item"
+        href="/pages/cart.html"
+        style="position: relative"
+      >
+        Bag
+        <span class="cart-count-badge cart-badge" style="display: none">
+          0
+        </span>
+      </a>
+      <a class="nav-right-item" href="/pages/login.html" id="nav-login-link">
+        Log In
+      </a>
+      <a
+        class="nav-right-item"
+        href="/pages/dashboard.html"
+        id="nav-profile-link"
+        style="display: none"
+      >
+        Account
+      </a>
+    </div>
+  </nav>
+  <body class="page-body">
+    <!-- Hero -->
+    <div
+      style="
+        min-height: 40vh;
+        display: flex;
+        align-items: center;
+        padding-top: 5rem;
+        background: black;
+        color: white;
+      "
+    >
+      <div class="container" style="text-align: center; padding: 3rem 1.5rem">
+        <span class="section-label" style="color: white"> Our Story </span>
+        <h1 style="max-width: 700px; margin: 0.5rem auto 1rem; color: white">
+          Celebrating the Hands That Shape India
+        </h1>
+        <p
+          style="
+            max-width: 540px;
+            margin: 0 auto;
+            font-size: 0.95rem;
+            line-height: 1.9;
+          "
+        >
+          CRAFT BAZAAR was born from a single belief — that the hands of an
+          artisan carry centuries of wisdom, and that wisdom deserves to reach
+          the world.
+        </p>
+      </div>
+    </div>
+    <!-- Mission -->
+    <section class="section">
+      <div class="container">
+        <div
+          class="fade-up"
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+          "
+        >
+          <div>
+            <span class="section-label"> Why we exist </span>
+            <h2>
+              India has over 7 million artisans. Most earn less than ₹200 a day.
+            </h2>
+            <p
+              style="
+                font-size: 0.9rem;
+                opacity: 0.8;
+                line-height: 1.9;
+                margin: 1rem 0;
+              "
+            >
+              Despite India being the world's largest producer of handicrafts,
+              the people who create them rarely benefit from the value they
+              generate. Middlemen, lack of digital access, and an absence of
+              authentic storytelling leave artisans invisible.
+            </p>
+            <p style="font-size: 0.9rem; opacity: 0.8; line-height: 1.9">
+              CRAFT BAZAAR removes that distance. We connect artisans directly
+              with buyers who genuinely care about what they're buying — and why
+              it matters.
+            </p>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+            <div
+              style="
+                background: var(--maroon);
+                border-radius: 16px;
+                padding: 2rem;
+                color: white;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  font-family: var(--font-head);
+                  font-size: 2.5rem;
+                  font-weight: 700;
+                "
+              >
+                1,200+
+              </div>
+              <div
+                style="font-size: 0.78rem; opacity: 0.75; margin-top: 0.3rem"
+              >
+                Artisan families supported
+              </div>
+            </div>
+            <div
+              style="
+                background: var(--terracotta);
+                border-radius: 16px;
+                padding: 2rem;
+                color: white;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  font-family: var(--font-head);
+                  font-size: 2.5rem;
+                  font-weight: 700;
+                "
+              >
+                28
+              </div>
+              <div
+                style="font-size: 0.78rem; opacity: 0.75; margin-top: 0.3rem"
+              >
+                States represented
+              </div>
+            </div>
+            <div
+              style="
+                background: var(--mustard);
+                border-radius: 16px;
+                padding: 2rem;
+                color: white;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  font-family: var(--font-head);
+                  font-size: 2.5rem;
+                  font-weight: 700;
+                "
+              >
+                8,000+
+              </div>
+              <div
+                style="font-size: 0.78rem; opacity: 0.75; margin-top: 0.3rem"
+              >
+                Handmade products
+              </div>
+            </div>
+            <div
+              style="
+                background: var(--emerald);
+                border-radius: 16px;
+                padding: 2rem;
+                color: white;
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  font-family: var(--font-head);
+                  font-size: 2.5rem;
+                  font-weight: 700;
+                "
+              >
+                100%
+              </div>
+              <div
+                style="font-size: 0.78rem; opacity: 0.75; margin-top: 0.3rem"
+              >
+                Direct from artisans
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- How it works -->
+    <section class="section" style="background: white">
+      <div class="container">
+        <div class="section-head fade-up">
+          <span class="section-label"> The Process </span>
+          <h2>How CRAFT BAZAAR Works</h2>
+          <div class="divider"></div>
+        </div>
+        <div
+          class="fade-up"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+          "
+        >
+          <div style="text-align: center; padding: 2rem 1.5rem">
+            <div
+              style="
+                width: 64px;
+                height: 64px;
+                border-radius: 50%;
+                background: var(--maroon);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                margin: 0 auto 1.2rem;
+              "
+            >
+              🧶
+            </div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem">
+              Artisan Lists a Craft
+            </h3>
+            <p style="font-size: 0.82rem; opacity: 0.75; line-height: 1.8">
+              An artisan signs up, creates their profile, and lists their
+              handmade products with photos, descriptions, pricing — and their
+              own craft story.
+            </p>
+          </div>
+          <div style="text-align: center; padding: 2rem 1.5rem">
+            <div
+              style="
+                width: 64px;
+                height: 64px;
+                border-radius: 50%;
+                background: var(--terracotta);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                margin: 0 auto 1.2rem;
+              "
+            >
+              ✅
+            </div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem">
+              Verified Handmade
+            </h3>
+            <p style="font-size: 0.82rem; opacity: 0.75; line-height: 1.8">
+              Products go through our Verified Handmade process — artisans fill
+              a craft questionnaire, and genuine pieces earn a trust badge
+              visible to buyers.
+            </p>
+          </div>
+          <div style="text-align: center; padding: 2rem 1.5rem">
+            <div
+              style="
+                width: 64px;
+                height: 64px;
+                border-radius: 50%;
+                background: var(--mustard);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                margin: 0 auto 1.2rem;
+              "
+            >
+              🛒
+            </div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem">
+              Customer Discovers & Buys
+            </h3>
+            <p style="font-size: 0.82rem; opacity: 0.75; line-height: 1.8">
+              Buyers explore by state, category, or search — find a piece they
+              love, read its story, and purchase securely with delivery to their
+              door.
+            </p>
+          </div>
+          <div style="text-align: center; padding: 2rem 1.5rem">
+            <div
+              style="
+                width: 64px;
+                height: 64px;
+                border-radius: 50%;
+                background: var(--emerald);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                margin: 0 auto 1.2rem;
+              "
+            >
+              ⭐
+            </div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem">
+              Stories & Reviews
+            </h3>
+            <p style="font-size: 0.82rem; opacity: 0.75; line-height: 1.8">
+              Buyers leave reviews, artisans build reputation, and each
+              transaction keeps a traditional craft alive for one more
+              generation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Values -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head fade-up">
+          <span class="section-label"> What we believe in </span>
+          <h2>Our Values</h2>
+          <div class="divider"></div>
+        </div>
+        <div
+          class="fade-up"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+          "
+        >
+          <div
+            style="
+              background: var(--white);
+              border-radius: var(--radius);
+              padding: 2rem;
+              box-shadow: 0 4px 16px var(--shadow);
+            "
+          >
+            <div style="font-size: 1.8rem; margin-bottom: 1rem">🏛️</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem">
+              Heritage First
+            </h3>
+            <p style="font-size: 0.85rem; opacity: 0.8; line-height: 1.8">
+              Every craft tradition on our platform has roots that go back
+              centuries. We treat that heritage with reverence, not as a
+              marketing strategy.
+            </p>
+          </div>
+          <div
+            style="
+              background: var(--white);
+              border-radius: var(--radius);
+              padding: 2rem;
+              box-shadow: 0 4px 16px var(--shadow);
+            "
+          >
+            <div style="font-size: 1.8rem; margin-bottom: 1rem">🤝</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem">
+              Fair to Artisans
+            </h3>
+            <p style="font-size: 0.85rem; opacity: 0.8; line-height: 1.8">
+              Artisans set their own prices. We never undercut their work by
+              suggesting "discounts." Their skill has value, and we protect
+              that.
+            </p>
+          </div>
+          <div
+            style="
+              background: var(--white);
+              border-radius: var(--radius);
+              padding: 2rem;
+              box-shadow: 0 4px 16px var(--shadow);
+            "
+          >
+            <div style="font-size: 1.8rem; margin-bottom: 1rem">🛡️</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem">
+              Radical Transparency
+            </h3>
+            <p style="font-size: 0.85rem; opacity: 0.8; line-height: 1.8">
+              Our Verified Handmade badge is earned, not paid for. We show
+              buyers exactly who made something, where it came from, and how it
+              was made.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="newsletter fade-up">
+          <span class="section-label" style="color: white"> Join us </span>
+          <h2>Be Part of the CRAFT BAZAAR Story</h2>
+          <p style="color: white; opacity: 100%">
+            Whether you're an artisan wanting to reach new customers, or a buyer
+            who wants their purchases to mean something — there's a place for
+            you here.
+          </p>
+          <div
+            style="
+              display: flex;
+              gap: 1rem;
+              justify-content: center;
+              flex-wrap: wrap;
+              margin-top: 1.5rem;
+            "
+          >
+            <a class="btn btn-terracotta" href="/pages/login.html">
+              Join as Artisan
+            </a>
+            <a
+              class="btn btn-outline"
+              href="/pages/products.html"
+              style="border-color: white; color: white"
+            >
+              Explore Crafts →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <span class="nav-logo"> CRAFT BAZAAR </span>
+            <p>
+              A celebration of India's living craft traditions. Every purchase
+              directly supports an artisan family.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Explore</h4>
+            <ul>
+              <li>
+                <a href="/pages/products.html"> All Products </a>
+              </li>
+              <li>
+                <a href="/pages/about.html"> About Us </a>
+              </li>
+              <li>
+                <a href="/pages/login.html"> Login / Sign Up </a>
+              </li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Sell with Us</h4>
+            <ul>
+              <li>
+                <a href="/pages/login.html?role=artisan"> Become an Artisan </a>
+              </li>
+              <li>
+                <a href="/pages/dashboard.html"> Dashboard </a>
+              </li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <ul>
+              <li>
+                <a href="mailto:hello@craftbazaar.in"> hello@craftbazaar.in </a>
+              </li>
+              <li>
+                <a href="#"> Instagram </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span> © 2026 CRAFT BAZAAR. Made for India's artisans. </span>
+          <span> Privacy Policy · Terms </span>
+        </div>
+      </div>
+    </footer>
+    <script src="../js/utils.js"></script>
+  </body>
+</html>

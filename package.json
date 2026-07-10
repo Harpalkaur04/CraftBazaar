@@ -1,0 +1,10 @@
+{
+  "name": "craftbazaar",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node dev.js",
+    "backend": "cd backend && node server.js",
+    "frontend": "cd frontend && node server.js"
+  }
+}

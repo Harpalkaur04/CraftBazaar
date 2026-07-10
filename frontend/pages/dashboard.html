@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — CRAFT BAZAAR</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <!-- ── Search Overlay ──────────────────────────────────── -->
+  <div class="search-overlay" id="search-overlay">
+    <input
+      type="text"
+      placeholder="WHAT ARE YOU LOOKING FOR?"
+      id="search-input-overlay"
+      onkeydown="if (event.key === 'Enter') doSearch();"
+    />
+    <button class="search-close" onclick="toggleSearch()">✕</button>
+  </div>
+
+  <!-- ── Sidebar Overlay ─────────────────────────────────── -->
+  <div
+    class="sidebar-overlay"
+    id="sidebar-overlay"
+    onclick="toggleSidebar()"
+  ></div>
+
+  <!-- ── Sidebar Menu ────────────────────────────────────── -->
+  <div class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-logo">CRAFT BAZAAR</div>
+    <nav>
+      <a href="/index.html" class="sidebar-nav-item">Home <span>→</span></a>
+      <a href="/pages/explore.html" class="sidebar-nav-item"
+        >Explore <span>→</span></a
+      >
+      <a href="/pages/states.html" class="sidebar-nav-item"
+        >States <span>→</span></a
+      >
+      <a href="/pages/categories.html" class="sidebar-nav-item"
+        >Categories <span>→</span></a
+      >
+      <a href="/pages/about.html" class="sidebar-nav-item"
+        >About <span>→</span></a
+      >
+      <button
+        class="btn btn-outline"
+        style="margin-top: 1.2rem"
+        onclick="logout()"
+      >
+        Log Out
+      </button>
+    </nav>
+    <p class="sidebar-tagline">
+      A curated marketplace celebrating authentic Indian handicrafts from
+      artisans across every state of India.
+    </p>
+  </div>
+
+  <!-- ── Top Navbar ──────────────────────────────────────── -->
+  <nav class="zara-nav" id="zara-nav">
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()">
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-right">
+      <a class="nav-right-item" onclick="toggleSearch()">Search</a>
+      <a
+        class="nav-right-item"
+        href="/pages/cart.html"
+        style="position: relative"
+      >
+        Bag
+        <span class="cart-count-badge cart-badge" style="display: none">0</span>
+      </a>
+      <a class="nav-right-item" id="nav-login-link" href="/pages/login.html"
+        >Log In</a
+      >
+      <a
+        class="nav-right-item"
+        id="nav-profile-link"
+        href="/pages/dashboard.html"
+        style="display: none"
+        >Account</a
+      >
+    </div>
+  </nav>
+  <body class="page-body">
+    <nav class="navbar scrolled">
+      <div class="container">
+        <div class="nav-inner">
+          <a class="nav-logo" href="/index.html">CRAFT BAZAAR</a>
+          <div class="nav-actions">
+            <a class="nav-icon" href="/pages/products.html">🏺</a>
+            <button
+              class="nav-icon"
+              onclick="logout()"
+              style="font-size: 0.8rem; color: var(--brown)"
+            >
+              Exit
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container dashboard-wrap">
+      <aside class="sidebar">
+        <div class="sidebar-avatar">
+          <div class="sidebar-avatar-img">👩‍🎨</div>
+          <div class="sidebar-name" id="sb-name">Loading...</div>
+          <div class="sidebar-role">Artisan · CRAFT BAZAAR</div>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#" class="active" onclick="showPanel('overview')"
+            >📊 Overview</a
+          >
+          <a href="#" onclick="showPanel('products')">🏺 My Products</a>
+          <a href="#" onclick="showPanel('add-product')">➕ Add Product</a>
+          <a href="#" onclick="showPanel('orders')">📦 Orders</a>
+          <a href="#" onclick="showPanel('profile')">👤 My Profile</a>
+          <a href="#" onclick="showPanel('reviews')">⭐ My Reviews</a>
+        </nav>
+      </aside>
+
+      <main>
+        <!-- Overview -->
+        <div id="panel-overview">
+          <h2 style="margin-bottom: 1.5rem">Welcome back 👋</h2>
+          <div class="dashboard-stats">
+            <div class="stat-card">
+              <span class="stat-card-num" id="stat-products">—</span>
+              <div class="stat-card-label">Products Listed</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card-num" id="stat-orders">—</span>
+              <div class="stat-card-label">Total Orders</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card-num" id="stat-revenue">—</span>
+              <div class="stat-card-label">Total Revenue</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-card-num" id="stat-rating">—</span>
+              <div class="stat-card-label">Avg. Rating</div>
+            </div>
+          </div>
+          <div
+            style="
+              background: var(--white);
+              border-radius: var(--radius);
+              padding: 1.5rem;
+              box-shadow: 0 4px 16px var(--shadow);
+              margin-top: 1.5rem;
+            "
+          >
+            <h3 style="margin-bottom: 1rem; font-size: 1.1rem">
+              Recent Orders
+            </h3>
+            <div id="recent-orders-table"><div class="spinner"></div></div>
+          </div>
+        </div>
+
+        <!-- My Products -->
+        <div id="panel-products" style="display: none">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 1.5rem;
+              flex-wrap: wrap;
+              gap: 1rem;
+            "
+          >
+            <h2>My Products</h2>
+            <button class="btn btn-primary" onclick="showPanel('add-product')">
+              + Add New Product
+            </button>
+          </div>
+          <div id="my-products-list"><div class="spinner"></div></div>
+        </div>
+
+        <!-- Add / Edit Product -->
+        <div id="panel-add-product" style="display: none">
+          <h2 style="margin-bottom: 1.5rem" id="add-product-title">
+            Add New Product
+          </h2>
+          <div
+            style="
+              background: var(--white);
+              border-radius: var(--radius);
+              padding: 2rem;
+              box-shadow: 0 4px 16px var(--shadow);
+            "
+          >
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem"
+            >
+              <div class="form-group" style="grid-column: 1/-1">
+                <label>Product Title *</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="p-title"
+                  placeholder="e.g. Jaipur Blue Pottery Vase"
+                />
+              </div>
+              <div class="form-group" style="grid-column: 1/-1">
+                <label>Description *</label
+                ><textarea
+                  class="form-control"
+                  id="p-desc"
+                  placeholder="Describe your product..."
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label>Price (₹) *</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  id="p-price"
+                  placeholder="e.g. 1200"
+                  min="0"
+                />
+              </div>
+              <div class="form-group">
+                <label>Stock *</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  id="p-stock"
+                  value="1"
+                  min="1"
+                />
+              </div>
+              <div class="form-group">
+                <label>Category *</label>
+                <select class="form-control" id="p-category">
+                  <option value="">Select category</option>
+                  <option value="textiles">Textiles & Clothing</option>
+                  <option value="jewellery">Jewellery</option>
+                  <option value="pottery">Pottery & Ceramics</option>
+                  <option value="home-decor">Home Décor & Furniture</option>
+                  <option value="footwear-leather">Footwear & Leather</option>
+                  <option value="paintings">Paintings & Wall Art</option>
+                  <option value="carpets-rugs">Carpets & Rugs</option>
+                  <option value="toys-puppets">Toys & Puppets</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>State of Origin *</label>
+                <select class="form-control" id="p-state">
+                  <option value="">Select state</option>
+                  <option>Rajasthan</option>
+                  <option>Gujarat</option>
+                  <option>Uttar Pradesh</option>
+                  <option>West Bengal</option>
+                  <option>Jammu & Kashmir</option>
+                  <option>Tamil Nadu</option>
+                  <option>Odisha</option>
+                  <option>Maharashtra</option>
+                  <option>Karnataka</option>
+                  <option>Madhya Pradesh</option>
+                  <option>Himachal Pradesh</option>
+                  <option>Bihar</option>
+                  <option>Punjab</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Craft Type</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="p-craft"
+                  placeholder="e.g. Blue Pottery, Bandhani"
+                />
+              </div>
+              <div class="form-group">
+                <label>Subcategory</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="p-subcategory"
+                  placeholder="e.g. Vase, Dupatta"
+                />
+              </div>
+              <div class="form-group" style="grid-column: 1/-1">
+                <label>Image URLs (comma separated)</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="p-images"
+                  placeholder="https://image1.jpg, https://image2.jpg"
+                />
+              </div>
+              <div class="form-group" style="grid-column: 1/-1">
+                <label
+                  >✍ Your Craft Story
+                  <span style="color: var(--terracotta); font-size: 0.72rem"
+                    >(Unique to CRAFT BAZAAR)</span
+                  ></label
+                ><textarea
+                  class="form-control"
+                  id="p-story"
+                  placeholder="Tell the customer the story behind this piece..."
+                ></textarea>
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                gap: 1rem;
+                margin-top: 1rem;
+                flex-wrap: wrap;
+              "
+            >
+              <button class="btn btn-primary" onclick="submitProduct()">
+                <span id="submit-product-label">Save Product</span>
+              </button>
+              <button
+                class="btn btn-outline"
+                onclick="
+                  resetProductForm();
+                  showPanel('products');
+                "
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders -->
+        <div id="panel-orders" style="display: none">
+          <h2 style="margin-bottom: 1.5rem">Orders for My Products</h2>
+          <div id="orders-table-wrap"><div class="spinner"></div></div>
+        </div>
+
+        <!-- Profile -->
+        <div id="panel-profile" style="display: none">
+          <h2 style="margin-bottom: 1.5rem">My Profile</h2>
+          <div
+            style="
+              background: var(--white);
+              border-radius: var(--radius);
+              padding: 2rem;
+              box-shadow: 0 4px 16px var(--shadow);
+              max-width: 560px;
+            "
+          >
+            <div class="form-group">
+              <label>Full Name</label
+              ><input type="text" class="form-control" id="prof-name" />
+            </div>
+            <div class="form-group">
+              <label>Email</label
+              ><input
+                type="email"
+                class="form-control"
+                id="prof-email"
+                disabled
+                style="opacity: 0.5"
+              />
+            </div>
+            <div class="form-group">
+              <label>Phone</label
+              ><input type="tel" class="form-control" id="prof-phone" />
+            </div>
+            <div class="form-group">
+              <label>Shop / Studio Name</label
+              ><input type="text" class="form-control" id="prof-shop" />
+            </div>
+            <div class="form-group">
+              <label>State</label
+              ><input type="text" class="form-control" id="prof-state" />
+            </div>
+            <div class="form-group">
+              <label>About Your Craft</label
+              ><textarea class="form-control" id="prof-bio"></textarea>
+            </div>
+            <div class="form-group">
+              <label>New Password (leave blank to keep current)</label
+              ><input
+                type="password"
+                class="form-control"
+                id="prof-password"
+                placeholder="New password"
+              />
+            </div>
+            <button class="btn btn-primary" onclick="updateProfile()">
+              Save Changes
+            </button>
+          </div>
+        </div>
+        <!-- Reviews Panel -->
+        <div id="panel-reviews" style="display: none">
+          <h2 style="margin-bottom: 0.5rem">Reviews on My Products</h2>
+          <p style="font-size: 0.85rem; opacity: 0.65; margin-bottom: 1.5rem">
+            See what customers are saying about your handmade products.
+          </p>
+          <div id="reviews-panel-content"><div class="spinner"></div></div>
+        </div>
+      </main>
+    </div>
+
+    <div style="height: 3rem"></div>
+    <script src="../js/utils.js"></script>
+    <script>
+      let editingProductId = null;
+      const user = getUser();
+      if (!user || (user.role !== "artisan" && user.role !== "admin"))
+        window.location.href = "/pages/login.html";
+      document.getElementById("sb-name").textContent = user?.name || "Artisan";
+
+      const showPanel = (name) => {
+        document
+          .querySelectorAll("main > div")
+          .forEach((p) => (p.style.display = "none"));
+        document.getElementById("panel-" + name).style.display = "block";
+        document
+          .querySelectorAll(".sidebar-nav a")
+          .forEach((a) => a.classList.remove("active"));
+        const panels = [
+          "overview",
+          "products",
+          "add-product",
+          "orders",
+          "profile",
+          "reviews",
+        ];
+        const idx = panels.indexOf(name);
+        const links = document.querySelectorAll(".sidebar-nav a");
+        if (links[idx]) links[idx].classList.add("active");
+        if (name === "overview") loadOverview();
+        if (name === "products") loadMyProducts();
+        if (name === "orders") loadOrders();
+        if (name === "profile") loadProfile();
+        if (name === "reviews") loadArtisanReviews();
+      };
+
+      const loadOverview = async () => {
+        try {
+          const profileData = await api("/auth/profile", "GET", null, true);
+
+          // Check if artisan is not approved yet
+          if (profileData.role === "artisan" && !profileData.isApproved) {
+            document.querySelector("main").innerHTML = `
+        <div style="
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          justify-content:center;
+          min-height:60vh;
+          text-align:center;
+          padding:2rem;
+        ">
+          <div style="font-size:4rem;margin-bottom:1.5rem;">⏳</div>
+          <h2 style="color:var(--maroon);margin-bottom:1rem;">Account Pending Approval</h2>
+          <p style="max-width:480px;opacity:0.75;font-size:0.92rem;line-height:1.8;margin-bottom:1.5rem;">
+            Your artisan account has been created successfully! Our admin team will review your profile and approve your account shortly. Once approved, you'll be able to add and manage your products.
+          </p>
+          <div style="background:var(--white);border-radius:var(--radius);padding:1.5rem 2rem;box-shadow:0 4px 16px var(--shadow);margin-bottom:2rem;max-width:400px;width:100%;">
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+              <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;">
+                <span style="color:var(--emerald);font-size:1.1rem;">✅</span>
+                Account created successfully
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;">
+                <span style="color:var(--mustard);font-size:1.1rem;">⏳</span>
+                Waiting for admin approval
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;opacity:0.4;">
+                <span style="font-size:1.1rem;">🔒</span>
+                Add and manage products
+              </div>
+              <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;opacity:0.4;">
+                <span style="font-size:1.1rem;">🔒</span>
+                Receive orders
+              </div>
+            </div>
+          </div>
+          <p style="font-size:0.8rem;opacity:0.55;">
+            Usually takes less than 24 hours. Contact us at 
+            <a href="mailto:hello@craftbazaar.in" style="color:var(--terracotta);">hello@craftbazaar.in</a>
+          </p>
+          <button class="btn btn-outline" style="margin-top:1.5rem;" onclick="logout()">
+            Logout
+          </button>
+        </div>
+      `;
+            return;
+          }
+
+          // Normal overview for approved artisans
+          const [productsData, ordersData] = await Promise.all([
+            api("/products/my-products", "GET", null, true),
+            api("/orders/artisan-orders", "GET", null, true),
+          ]);
+          document.getElementById("stat-products").textContent =
+            productsData.length;
+          document.getElementById("stat-orders").textContent =
+            ordersData.length;
+          const revenue = ordersData.reduce(
+            (sum, o) => sum + (o.totalAmount || 0),
+            0,
+          );
+          document.getElementById("stat-revenue").textContent =
+            formatPrice(revenue);
+          const avgRating = productsData.length
+            ? (
+                productsData.reduce((s, p) => s + (p.averageRating || 0), 0) /
+                productsData.length
+              ).toFixed(1)
+            : "—";
+          document.getElementById("stat-rating").textContent =
+            avgRating !== "—" ? avgRating + " ★" : "—";
+          renderOrdersTable(ordersData.slice(0, 5), "recent-orders-table");
+        } catch (err) {
+          document.getElementById("recent-orders-table").innerHTML =
+            '<p style="opacity:0.6;font-size:0.85rem;">Could not load data.</p>';
+        }
+      };
+
+      const loadMyProducts = async () => {
+        const wrap = document.getElementById("my-products-list");
+        wrap.innerHTML = '<div class="spinner"></div>';
+        try {
+          const products = await api(
+            "/products/my-products",
+            "GET",
+            null,
+            true,
+          );
+          if (!products.length) {
+            wrap.innerHTML =
+              '<div class="empty-state"><div class="icon">🏺</div><h3>No products yet</h3><p>Add your first handmade product!</p><button class="btn btn-primary" style="margin-top:1rem;" onclick="showPanel(\'add-product\')">+ Add Product</button></div>';
+            return;
+          }
+          wrap.innerHTML = `<div style="background:var(--white);border-radius:var(--radius);box-shadow:0 4px 16px var(--shadow);overflow:hidden;overflow-x:auto;">
+          <table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Rating</th><th>Actions</th></tr></thead>
+          <tbody>${products
+            .map(
+              (p) => `<tr>
+            <td><div style="display:flex;align-items:center;gap:0.75rem;">
+              <div style="width:44px;height:44px;border-radius:8px;overflow:hidden;background:var(--light);flex-shrink:0;"><img src="${p.images?.[0] || ""}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'"></div>
+              <div><div style="font-weight:600;font-size:0.85rem;color:var(--maroon);">${p.title}</div><div style="font-size:0.72rem;opacity:0.6;">${p.state}</div></div></div></td>
+            <td style="font-size:0.8rem;">${p.category?.replace("-", " ")}</td>
+            <td style="font-family:var(--font-head);font-weight:600;">${formatPrice(p.price)}</td>
+            <td>${p.stock}</td>
+            <td>${p.averageRating || 0} ★ (${p.numReviews || 0})</td>
+            <td><div style="display:flex;gap:0.5rem;">
+              <button onclick='editProduct(${JSON.stringify(p)})' style="font-size:0.75rem;padding:0.3rem 0.7rem;border-radius:6px;background:var(--bg);border:1px solid var(--light);cursor:pointer;">Edit</button>
+              <button onclick="deleteProduct('${p._id}')" style="font-size:0.75rem;padding:0.3rem 0.7rem;border-radius:6px;background:rgba(107,15,26,0.08);border:1px solid transparent;cursor:pointer;color:var(--maroon);">Delete</button>
+            </div></td></tr>`,
+            )
+            .join("")}
+          </tbody></table></div>`;
+        } catch (e) {
+          wrap.innerHTML =
+            '<p style="opacity:0.6;">Could not load products.</p>';
+        }
+      };
+
+      const editProduct = (p) => {
+        editingProductId = p._id;
+        document.getElementById("add-product-title").textContent =
+          "Edit Product";
+        document.getElementById("submit-product-label").textContent =
+          "Update Product";
+        document.getElementById("p-title").value = p.title || "";
+        document.getElementById("p-desc").value = p.description || "";
+        document.getElementById("p-price").value = p.price || "";
+        document.getElementById("p-stock").value = p.stock || 1;
+        document.getElementById("p-category").value = p.category || "";
+        document.getElementById("p-state").value = p.state || "";
+        document.getElementById("p-craft").value = p.craftType || "";
+        document.getElementById("p-subcategory").value = p.subcategory || "";
+        document.getElementById("p-images").value = (p.images || []).join(", ");
+        document.getElementById("p-story").value = p.craftStory || "";
+        showPanel("add-product");
+      };
+
+      const deleteProduct = async (id) => {
+        if (!confirm("Remove this product?")) return;
+        try {
+          await api("/products/" + id, "DELETE", null, true);
+          showToast("Product removed", "success");
+          loadMyProducts();
+        } catch (e) {
+          showToast(e.message, "error");
+        }
+      };
+
+      const submitProduct = async () => {
+        const title = document.getElementById("p-title").value.trim(),
+          desc = document.getElementById("p-desc").value.trim(),
+          price = document.getElementById("p-price").value,
+          stock = document.getElementById("p-stock").value,
+          category = document.getElementById("p-category").value,
+          state = document.getElementById("p-state").value,
+          craft = document.getElementById("p-craft").value.trim(),
+          subcat = document.getElementById("p-subcategory").value.trim(),
+          imagesRaw = document.getElementById("p-images").value.trim(),
+          story = document.getElementById("p-story").value.trim();
+        if (!title || !desc || !price || !category || !state) {
+          showToast("Please fill all required fields", "error");
+          return;
+        }
+        const images = imagesRaw
+          ? imagesRaw
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean)
+          : [];
+        const body = {
+          title,
+          description: desc,
+          price: Number(price),
+          stock: Number(stock),
+          category,
+          state,
+          craftType: craft,
+          subcategory: subcat,
+          images,
+          craftStory: story,
+        };
+        const btn = document.querySelector("#panel-add-product .btn-primary");
+        btn.disabled = true;
+        document.getElementById("submit-product-label").textContent =
+          editingProductId ? "Updating..." : "Saving...";
+        try {
+          if (editingProductId) {
+            await api("/products/" + editingProductId, "PUT", body, true);
+            showToast("Product updated! ✓", "success");
+          } else {
+            await api("/products", "POST", body, true);
+            showToast("Product added! 🎨", "success");
+          }
+          resetProductForm();
+          showPanel("products");
+        } catch (e) {
+          showToast(e.message, "error");
+        } finally {
+          btn.disabled = false;
+          document.getElementById("submit-product-label").textContent =
+            editingProductId ? "Update Product" : "Save Product";
+        }
+      };
+
+      const resetProductForm = () => {
+        editingProductId = null;
+        document.getElementById("add-product-title").textContent =
+          "Add New Product";
+        document.getElementById("submit-product-label").textContent =
+          "Save Product";
+        [
+          "p-title",
+          "p-desc",
+          "p-price",
+          "p-stock",
+          "p-category",
+          "p-state",
+          "p-craft",
+          "p-subcategory",
+          "p-images",
+          "p-story",
+        ].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.value = id === "p-stock" ? "1" : "";
+        });
+      };
+
+      const loadOrders = async () => {
+        const wrap = document.getElementById("orders-table-wrap");
+        wrap.innerHTML = '<div class="spinner"></div>';
+        try {
+          const orders = await api("/orders/artisan-orders", "GET", null, true);
+          renderOrdersTable(orders, "orders-table-wrap");
+        } catch (e) {
+          wrap.innerHTML = '<p style="opacity:0.6;">Could not load orders.</p>';
+        }
+      };
+
+      const renderOrdersTable = (orders, containerId) => {
+        const wrap = document.getElementById(containerId);
+        if (!orders.length) {
+          wrap.innerHTML =
+            '<div class="empty-state"><div class="icon">📦</div><h3>No orders yet</h3><p>Orders for your products will appear here.</p></div>';
+          return;
+        }
+        wrap.innerHTML = `<div style="overflow-x:auto;"><table class="data-table">
+        <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th><th>Update</th></tr></thead>
+        <tbody>${orders
+          .map(
+            (o) => `<tr>
+          <td style="font-size:0.72rem;opacity:0.7;font-family:monospace;">${o._id.slice(-8)}</td>
+          <td style="font-size:0.82rem;">${o.customer?.name || "—"}</td>
+          <td>${o.items?.length || 0} item(s)</td>
+          <td style="font-family:var(--font-head);font-weight:600;">${formatPrice(o.totalAmount)}</td>
+          <td><span class="status-badge status-${o.orderStatus}">${o.orderStatus}</span></td>
+          <td style="font-size:0.78rem;">${formatDate(o.createdAt)}</td>
+          <td><select onchange="updateStatus('${o._id}',this.value)" style="font-size:0.75rem;padding:0.3rem 0.5rem;border-radius:6px;border:1px solid var(--light);background:var(--bg);cursor:pointer;">
+            <option value="">Update</option>
+            <option value="processing">Processing</option><option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option><option value="cancelled">Cancelled</option>
+          </select></td></tr>`,
+          )
+          .join("")}
+        </tbody></table></div>`;
+      };
+
+      const updateStatus = async (id, status) => {
+        if (!status) return;
+        try {
+          await api(
+            "/orders/" + id + "/status",
+            "PUT",
+            { orderStatus: status },
+            true,
+          );
+          showToast("Order updated", "success");
+          loadOrders();
+        } catch (e) {
+          showToast(e.message, "error");
+        }
+      };
+
+      const loadProfile = async () => {
+        try {
+          const d = await api("/auth/profile", "GET", null, true);
+          document.getElementById("prof-name").value = d.name || "";
+          document.getElementById("prof-email").value = d.email || "";
+          document.getElementById("prof-phone").value = d.phone || "";
+          document.getElementById("prof-shop").value = d.shopName || "";
+          document.getElementById("prof-state").value = d.state || "";
+          document.getElementById("prof-bio").value = d.bio || "";
+        } catch (e) {
+          showToast("Could not load profile", "error");
+        }
+      };
+
+      const updateProfile = async () => {
+        const body = {
+          name: document.getElementById("prof-name").value.trim(),
+          phone: document.getElementById("prof-phone").value.trim(),
+          shopName: document.getElementById("prof-shop").value.trim(),
+          state: document.getElementById("prof-state").value.trim(),
+          bio: document.getElementById("prof-bio").value.trim(),
+        };
+        const pass = document.getElementById("prof-password").value;
+        if (pass) body.password = pass;
+        try {
+          const updated = await api("/auth/profile", "PUT", body, true);
+          saveAuth(getToken(), { ...getUser(), name: updated.name });
+          document.getElementById("sb-name").textContent = updated.name;
+          showToast("Profile updated! ✓", "success");
+        } catch (e) {
+          showToast(e.message, "error");
+        }
+      };
+      const loadArtisanReviews = async () => {
+        const wrap = document.getElementById("reviews-panel-content");
+        wrap.innerHTML = '<div class="spinner"></div>';
+        try {
+          // First get all artisan's products
+          const products = await api(
+            "/products/my-products",
+            "GET",
+            null,
+            true,
+          );
+
+          if (!products.length) {
+            wrap.innerHTML = `<div class="empty-state">
+        <div class="icon">⭐</div>
+        <h3>No products yet</h3>
+        <p>Add products first to receive reviews.</p>
+      </div>`;
+            return;
+          }
+
+          // Fetch reviews for each product
+          let allReviews = [];
+          for (const product of products) {
+            try {
+              const reviews = await api(`/reviews/${product._id}`);
+              // attach product info to each review
+              const reviewsWithProduct = reviews.map((r) => ({
+                ...r,
+                productTitle: product.title,
+                productId: product._id,
+                productImage: product.images?.[0] || "",
+              }));
+              allReviews = [...allReviews, ...reviewsWithProduct];
+            } catch (e) {
+              // skip if no reviews for this product
+            }
+          }
+
+          if (!allReviews.length) {
+            wrap.innerHTML = `<div class="empty-state">
+        <div class="icon">⭐</div>
+        <h3>No reviews yet</h3>
+        <p>When customers review your products, they'll appear here.</p>
+      </div>`;
+            return;
+          }
+
+          // Sort newest first
+          allReviews.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+          );
+
+          wrap.innerHTML = `
+  <!-- Summary Stats -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:2rem;">
+    <div class="stat-card">
+      <span class="stat-card-num">${allReviews.length}</span>
+      <div class="stat-card-label">Total Reviews</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card-num">
+        ${(allReviews.reduce((s, r) => s + r.rating, 0) / allReviews.length).toFixed(1)} ★
+      </span>
+      <div class="stat-card-label">Average Rating</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card-num">${allReviews.filter((r) => r.rating >= 4).length}</span>
+      <div class="stat-card-label">Positive Reviews (4★+)</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card-num">${allReviews.filter((r) => r.rating <= 2).length}</span>
+      <div class="stat-card-label">Critical Reviews (1-2★)</div>
+    </div>
+  </div>
+
+  <!-- Reviews List -->
+  <div style="display:flex;flex-direction:column;gap:1rem;">
+    ${allReviews
+      .map(
+        (r) => `
+      <div style="background:var(--white);border-radius:var(--radius);padding:1.5rem;box-shadow:0 4px 16px var(--shadow);">
+
+        <!-- Product Info -->
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--light);">
+          <div style="width:44px;height:44px;border-radius:8px;overflow:hidden;background:var(--light);flex-shrink:0;">
+            <img src="${r.productImage}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:0.72rem;opacity:0.6;">Review on</div>
+            <div style="font-family:var(--font-head);font-size:0.95rem;font-weight:600;color:var(--maroon);">
+              <a href="/pages/product.html?id=${r.productId}" style="color:var(--maroon);">${r.productTitle}</a>
+            </div>
+          </div>
+          <!-- ⭐ Stars + Report button side by side — same as product page -->
+          <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0;">
+            <div style="font-size:0.9rem;color:var(--mustard);">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</div>
+            ${
+              r.isFlagged
+                ? `<span style="font-size:0.68rem;padding:0.2rem 0.6rem;border-radius:50px;background:rgba(216,160,49,0.15);color:var(--mustard);font-weight:600;">⚑ Flagged</span>`
+                : `<button onclick="flagReview('${r._id}')" style="font-size:0.7rem;padding:0.25rem 0.75rem;border-radius:50px;border:1.5px solid rgba(107,15,26,0.25);background:transparent;color:var(--brown);cursor:pointer;font-family:var(--font-body);">⚑ Report</button>`
+            }
+          </div>
+        </div>
+
+        <!-- Customer + Comment -->
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">👤</div>
+          <div>
+            <div style="font-weight:600;font-size:0.85rem;color:var(--brown);margin-bottom:0.3rem;">
+              ${r.customer?.name || "Customer"}
+            </div>
+            <p style="font-size:0.85rem;opacity:0.8;line-height:1.7;margin:0;">
+              ${r.comment || '<span style="opacity:0.5;font-style:italic;">No comment left</span>'}
+            </p>
+          </div>
+          <div style="margin-left:auto;font-size:0.7rem;opacity:0.55;white-space:nowrap;">
+            ${formatDate(r.createdAt)}
+          </div>
+        </div>
+
+      </div>
+    `,
+      )
+      .join("")}
+  </div>
+`;
+        } catch (err) {
+          wrap.innerHTML =
+            '<p style="opacity:0.6;">Could not load reviews.</p>';
+        }
+      };
+      const flagReview = (reviewId) => {
+        if (!isLoggedIn()) {
+          showToast("Please log in to report a review", "error");
+          return;
+        }
+
+        const existing = document.getElementById("flag-modal");
+        if (existing) existing.remove();
+
+        const modal = document.createElement("div");
+        modal.id = "flag-modal";
+        modal.style.cssText = `
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    background:rgba(0,0,0,0.5);z-index:9999;
+    display:flex;align-items:center;justify-content:center;
+    padding:1rem;
+  `;
+
+        modal.innerHTML = `
+    <div style="background:var(--white);border-radius:16px;padding:2rem;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <h3 style="font-family:var(--font-head);color:var(--maroon);margin-bottom:0.5rem;font-size:1.3rem;">Report Review</h3>
+      <p style="font-size:0.82rem;opacity:0.65;margin-bottom:1.5rem;line-height:1.6;">Select why you are reporting this review.</p>
+      <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem;">
+        ${[
+          "Inappropriate or offensive language",
+          "Fake or misleading review",
+          "Spam or promotional content",
+          "Irrelevant to this product",
+          "Contains personal information",
+          "Harassment or hate speech",
+          "Other",
+        ]
+          .map(
+            (reason, i) => `
+          <label style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;border-radius:10px;border:1.5px solid var(--light);cursor:pointer;font-size:0.85rem;transition:all 0.2s;"
+            onmouseover="this.style.borderColor='var(--terracotta)';this.style.background='rgba(201,106,69,0.05)'"
+            onmouseout="this.style.borderColor='var(--light)';this.style.background='transparent'">
+            <input type="radio" name="flag-reason" value="${reason}" style="accent-color:var(--maroon);width:16px;height:16px;" ${i === 0 ? "checked" : ""}>
+            ${reason}
+          </label>
+        `,
+          )
+          .join("")}
+      </div>
+      <div id="other-field" style="display:none;margin-bottom:1.5rem;">
+        <textarea id="other-reason-text" placeholder="Please describe the issue..."
+          style="width:100%;padding:0.75rem 1rem;border:1.5px solid var(--light);border-radius:10px;font-family:var(--font-body);font-size:0.85rem;resize:vertical;min-height:80px;outline:none;color:var(--brown);background:var(--bg);"></textarea>
+      </div>
+      <div style="display:flex;gap:0.75rem;">
+        <button onclick="submitFlag('${reviewId}')" class="btn btn-primary" style="flex:1;">Submit Report</button>
+        <button onclick="document.getElementById('flag-modal').remove()" class="btn btn-outline" style="flex:1;">Cancel</button>
+      </div>
+    </div>
+  `;
+
+        document.body.appendChild(modal);
+
+        modal.querySelectorAll('input[name="flag-reason"]').forEach((radio) => {
+          radio.addEventListener("change", () => {
+            document.getElementById("other-field").style.display =
+              radio.value === "Other" ? "block" : "none";
+          });
+        });
+
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) modal.remove();
+        });
+      };
+
+      const submitFlag = async (reviewId) => {
+        const selected = document.querySelector(
+          'input[name="flag-reason"]:checked',
+        );
+        if (!selected) {
+          showToast("Please select a reason", "error");
+          return;
+        }
+        let reason = selected.value;
+        if (reason === "Other") {
+          const otherText = document
+            .getElementById("other-reason-text")
+            .value.trim();
+          if (!otherText) {
+            showToast("Please describe the issue", "error");
+            return;
+          }
+          reason = otherText;
+        }
+        const btn = document.querySelector("#flag-modal .btn-primary");
+        btn.textContent = "Submitting...";
+        btn.disabled = true;
+        try {
+          await api(`/reviews/${reviewId}/flag`, "PUT", { reason }, true);
+          document.getElementById("flag-modal").remove();
+          showToast("Review reported to admin ✓", "success");
+          loadArtisanReviews();
+        } catch (err) {
+          showToast(err.message, "error");
+          btn.textContent = "Submit Report";
+          btn.disabled = false;
+        }
+      };
+      showPanel("overview");
+    </script>
+  </body>
+</html>

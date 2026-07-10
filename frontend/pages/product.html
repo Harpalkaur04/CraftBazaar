@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product — CRAFT BAZAAR</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <!-- ── Search Overlay ──────────────────────────────────── -->
+  <div class="search-overlay" id="search-overlay">
+    <input
+      type="text"
+      placeholder="WHAT ARE YOU LOOKING FOR?"
+      id="search-input-overlay"
+      onkeydown="if (event.key === 'Enter') doSearch();"
+    />
+    <button class="search-close" onclick="toggleSearch()"></button>
+  </div>
+  <!-- ── Sidebar Overlay ─────────────────────────────────── -->
+  <div
+    class="sidebar-overlay"
+    id="sidebar-overlay"
+    onclick="toggleSidebar()"
+  ></div>
+  <!-- ── Sidebar Menu ────────────────────────────────────── -->
+  <div class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-logo">CRAFT BAZAAR</div>
+    <nav>
+      <a href="/index.html" class="sidebar-nav-item">Home <span>→</span></a>
+      <a href="/pages/explore.html" class="sidebar-nav-item"
+        >Explore <span>→</span></a
+      >
+      <a href="/pages/states.html" class="sidebar-nav-item"
+        >States <span>→</span></a
+      >
+      <a href="/pages/categories.html" class="sidebar-nav-item"
+        >Categories <span>→</span></a
+      >
+      <a href="/pages/about.html" class="sidebar-nav-item"
+        >About <span>→</span></a
+      >
+      <button
+        class="btn btn-outline"
+        style="margin-top: 1.2rem"
+        onclick="logout()"
+      >
+        Log Out
+      </button>
+    </nav>
+    <p class="sidebar-tagline">
+      A curated marketplace celebrating authentic Indian handicrafts from
+      artisans across every state of India.
+    </p>
+  </div>
+  <!-- ── Top Navbar ──────────────────────────────────────── -->
+  <nav class="zara-nav" id="zara-nav">
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()">
+      <span></span> <span></span>
+    </button>
+    <div class="nav-right">
+      <a class="nav-right-item" onclick="toggleSearch()">Search</a>
+      <a
+        class="nav-right-item"
+        href="/pages/cart.html"
+        style="position: relative"
+        >Bag
+        <span class="cart-count-badge cart-badge" style="display: none">0</span>
+      </a>
+      <a class="nav-right-item" id="nav-login-link" href="/pages/login.html"
+        >Log In</a
+      >
+      <a
+        class="nav-right-item"
+        id="nav-profile-link"
+        href="/pages/dashboard.html"
+        style="display: none"
+        >Account</a
+      >
+    </div>
+  </nav>
+  <body class="page-body">
+    <div style="padding-top: 5.5rem">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="/index.html">Home</a> <span>›</span>
+          <a href="/pages/products.html">Explore</a> <span>›</span>
+          <span id="breadcrumb-title">Product</span>
+        </div>
+      </div>
+    </div>
+    <!-- ── Product Detail ─────────────────────────────────── -->
+    <section class="section" style="padding-top: 1rem">
+      <div class="container">
+        <div id="product-loading"><div class="spinner"></div></div>
+        <div id="product-content" style="display: none">
+          <div class="product-detail-grid">
+            <!-- Left: Images -->
+            <div class="product-images">
+              <div class="product-main-img">
+                <img id="main-img" src="" alt="Product" />
+              </div>
+              <div class="product-thumbs" id="thumb-list"></div>
+            </div>
+            <!-- Right: Info -->
+            <div class="product-info">
+              <span class="section-label" id="product-category"></span>
+              <h1 id="product-title"></h1>
+              <div class="product-meta">
+                <div class="product-card-rating">
+                  <span class="stars" id="product-stars"></span>
+                  <span id="product-reviews-count"></span>
+                </div>
+                <span
+                  id="product-verified"
+                  style="display: none"
+                  class="product-card-badge verified"
+                  >Verified Handmade</span
+                >
+              </div>
+              <div class="product-price" id="product-price"></div>
+              <p
+                style="
+                  font-size: 0.88rem;
+                  opacity: 0.8;
+                  line-height: 1.9;
+                  margin: 1.2rem 0;
+                "
+                id="product-desc"
+              ></p>
+              <!-- Craft Story (unique feature) -->
+              <div
+                class="craft-story"
+                id="craft-story-box"
+                style="display: none"
+              >
+                <h4>Artisan's Craft Story</h4>
+                <p id="craft-story-text"></p>
+              </div>
+              <!-- Artisan info -->
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.75rem;
+                  padding: 1rem;
+                  background: var(--bg);
+                  border-radius: 12px;
+                  margin: 1.2rem 0;
+                "
+              >
+                <div
+                  style="
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 50%;
+                    background: var(--light);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.3rem;
+                    overflow: hidden;
+                  "
+                >
+                  <img
+                    id="artisan-avatar"
+                    src=""
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                      display: none;
+                    "
+                  />
+                  <span id="artisan-avatar-icon">👩‍🎨‍</span>
+                </div>
+                <div>
+                  <div style="font-size: 0.72rem; opacity: 0.6">Crafted by</div>
+                  <div
+                    style="
+                      font-family: var(--font-head);
+                      font-size: 1rem;
+                      font-weight: 600;
+                      color: var(--maroon);
+                    "
+                    id="artisan-name"
+                  ></div>
+                  <div
+                    style="font-size: 0.72rem; opacity: 0.65"
+                    id="artisan-state"
+                  ></div>
+                </div>
+              </div>
+              <!-- Stock -->
+              <div class="product-stock" id="stock-info"></div>
+              <!-- Quantity + Actions -->
+              <div class="product-actions">
+                <div class="qty-control">
+                  <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                  <span class="qty-num" id="qty-display">1</span>
+                  <button class="qty-btn" onclick="changeQty(1)">+</button>
+                </div>
+                <button class="btn btn-primary" onclick="handleAddToCart()">
+                  Add to Cart
+                </button>
+                <button class="btn btn-outline" onclick="handleBuyNow()">
+                  Buy Now
+                </button>
+              </div>
+              <!-- Meta tags -->
+              <div
+                style="
+                  display: flex;
+                  gap: 0.5rem;
+                  flex-wrap: wrap;
+                  margin-top: 1rem;
+                "
+              >
+                <span
+                  style="
+                    font-size: 0.72rem;
+                    padding: 0.3rem 0.8rem;
+                    background: var(--light);
+                    border-radius: 50px;
+                    color: var(--brown);
+                  "
+                  id="tag-state"
+                ></span>
+                <span
+                  style="
+                    font-size: 0.72rem;
+                    padding: 0.3rem 0.8rem;
+                    background: var(--light);
+                    border-radius: 50px;
+                    color: var(--brown);
+                  "
+                  id="tag-craft"
+                ></span>
+                <span
+                  style="
+                    font-size: 0.72rem;
+                    padding: 0.3rem 0.8rem;
+                    background: var(--light);
+                    border-radius: 50px;
+                    color: var(--brown);
+                  "
+                  id="tag-category"
+                ></span>
+              </div>
+            </div>
+          </div>
+          <!-- ── Reviews Section ─────────────────────────── -->
+          <div style="margin-top: 4rem">
+            <h2 style="margin-bottom: 2rem">Customer Reviews</h2>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+                align-items: start;
+              "
+            >
+              <!-- Add Review Form -->
+              <div id="review-form-wrap" style="display: none">
+                <div
+                  style="
+                    background: var(--white);
+                    border-radius: var(--radius);
+                    padding: 1.8rem;
+                    box-shadow: 0 4px 16px var(--shadow);
+                  "
+                >
+                  <h3 style="margin-bottom: 1.2rem; font-size: 1.2rem">
+                    Write a Review
+                  </h3>
+                  <div class="form-group">
+                    <label>Your Rating *</label>
+                    <div
+                      style="display: flex; gap: 0.5rem; font-size: 1.8rem"
+                      id="star-input"
+                    >
+                      <span
+                        class="star-btn"
+                        data-val="1"
+                        style="cursor: pointer; opacity: 0.3"
+                        >★</span
+                      >
+                      <span
+                        class="star-btn"
+                        data-val="2"
+                        style="cursor: pointer; opacity: 0.3"
+                        >★</span
+                      >
+                      <span
+                        class="star-btn"
+                        data-val="3"
+                        style="cursor: pointer; opacity: 0.3"
+                        >★</span
+                      >
+                      <span
+                        class="star-btn"
+                        data-val="4"
+                        style="cursor: pointer; opacity: 0.3"
+                        >★</span
+                      >
+                      <span
+                        class="star-btn"
+                        data-val="5"
+                        style="cursor: pointer; opacity: 0.3"
+                        >★</span
+                      >
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="review-comment">Your Review</label>
+                    <textarea
+                      class="form-control"
+                      id="review-comment"
+                      placeholder="Share your experience with this product..."
+                    ></textarea>
+                  </div>
+                  <button class="btn btn-primary" onclick="submitReview()">
+                    Submit Review
+                  </button>
+                </div>
+              </div>
+              <!-- Login to review prompt -->
+              <div
+                id="login-to-review"
+                style="
+                  background: var(--light);
+                  border-radius: var(--radius);
+                  padding: 1.8rem;
+                  text-align: center;
+                "
+              >
+                <div style="font-size: 2rem; margin-bottom: 0.75rem"></div>
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem">
+                  Share your experience
+                </h3>
+                <p
+                  style="font-size: 0.82rem; opacity: 0.7; margin-bottom: 1rem"
+                >
+                  Log in as a customer to write a review
+                </p>
+                <a
+                  href="/pages/login.html"
+                  class="btn btn-outline"
+                  style="font-size: 0.82rem"
+                  >Log In</a
+                >
+              </div>
+              <!-- Reviews List -->
+              <div id="reviews-list">
+                <div class="spinner"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom" style="border-top: none; padding-top: 0">
+          <span>© 2026 CRAFT BAZAAR. Made for India's artisans.</span>
+          <a
+            href="/pages/products.html"
+            style="color: rgba(255, 255, 255, 0.6); font-size: 0.8rem"
+            >← Back to Explore</a
+          >
+        </div>
+      </div>
+    </footer>
+    <script src="../js/utils.js"></script>
+    <script>
+      let product = null;
+      let qty = 1;
+      let selectedRating = 0;
+      const productId = new URLSearchParams(window.location.search).get("id");
+      const loadProduct = async () => {
+        if (!productId) {
+          window.location.href = "/pages/products.html";
+          return;
+        }
+        try {
+          product = await api(`/products/${productId}`);
+          renderProduct();
+          loadReviews();
+        } catch (err) {
+          document.getElementById("product-loading").innerHTML =
+            `<div class="empty-state">
+            <div class="icon">
+               </div>
+               <h3>Product not found</h3>
+               </div>`;
+        }
+      };
+      const renderProduct = () => {
+        document.title = `${product.title} — craftbazaar`;
+        document.getElementById("breadcrumb-title").textContent = product.title;
+        document.getElementById("product-title").textContent = product.title;
+        document.getElementById("product-category").textContent =
+          product.category?.replace("-", " ");
+        document.getElementById("product-desc").textContent =
+          product.description;
+        document.getElementById("product-price").textContent = formatPrice(
+          product.price,
+        );
+        document.getElementById("product-stars").textContent = renderStars(
+          product.averageRating || 0,
+        );
+        document.getElementById("product-reviews-count").textContent =
+          `(${product.numReviews || 0} reviews)`;
+        document.getElementById("stock-info").textContent =
+          product.stock > 0 ? ` ${product.stock} in stock` : " Out of stock";
+        if (product.isHandmadeVerified) {
+          document.getElementById("product-verified").style.display =
+            "inline-block";
+        }
+        if (product.craftStory) {
+          document.getElementById("craft-story-text").textContent =
+            product.craftStory;
+          document.getElementById("craft-story-box").style.display = "block";
+        }
+        if (product.artisan) {
+          document.getElementById("artisan-name").textContent =
+            product.artisan.shopName || product.artisan.name;
+          document.getElementById("artisan-state").textContent =
+            `${product.artisan.state || ""} ${product.artisan.isVerifiedArtisan ? " Verified" : ""}`;
+        }
+        document.getElementById("tag-state").textContent = ` ${product.state}`;
+        document.getElementById("tag-craft").textContent = product.craftType
+          ? ` ${product.craftType}`
+          : "";
+        document.getElementById("tag-category").textContent =
+          ` ${product.category?.replace("-", " ")}`;
+        const imgs = product.images?.length
+          ? product.images
+          : ["/assets/placeholder.svg"];
+        document.getElementById("main-img").src = imgs[0];
+        document.getElementById("thumb-list").innerHTML = imgs
+          .map(
+            (src, i) =>
+              ` <div class="product-thumb ${i === 0 ? "active" : ""}" onclick="switchImg('${src}', this)"> <img src="${src}" alt="Product image ${i + 1}" onerror="this.src='/assets/placeholder.svg'"> </div> `,
+          )
+          .join("");
+        const user = getUser();
+        if (user && user.role === "customer") {
+          document.getElementById("review-form-wrap").style.display = "block";
+          document.getElementById("login-to-review").style.display = "none";
+        }
+        document.getElementById("product-loading").style.display = "none";
+        document.getElementById("product-content").style.display = "block";
+      };
+      const switchImg = (src, thumb) => {
+        document.getElementById("main-img").src = src;
+        document
+          .querySelectorAll(".product-thumb")
+          .forEach((t) => t.classList.remove("active"));
+        thumb.classList.add("active");
+      };
+      const changeQty = (delta) => {
+        qty = Math.max(1, Math.min(qty + delta, product?.stock || 1));
+        document.getElementById("qty-display").textContent = qty;
+      };
+      const handleAddToCart = () => {
+        if (!product || product.stock === 0) {
+          showToast("Out of stock", "error");
+          return;
+        }
+        addToCart(product, qty);
+      };
+      const handleBuyNow = () => {
+        if (!product || product.stock === 0) {
+          showToast("Out of stock", "error");
+          return;
+        }
+        addToCart(product, qty);
+        window.location.href = "/pages/cart.html";
+      };
+      document.querySelectorAll(".star-btn").forEach((star) => {
+        star.addEventListener("click", () => {
+          selectedRating = parseInt(star.dataset.val);
+          document.querySelectorAll(".star-btn").forEach((s, i) => {
+            s.style.opacity = i < selectedRating ? "1" : "0.3";
+            s.style.color = i < selectedRating ? "var(--mustard)" : "inherit";
+          });
+        });
+      });
+      const submitReview = async () => {
+        if (!selectedRating) {
+          showToast("Please select a rating", "error");
+          return;
+        }
+        const comment = document.getElementById("review-comment").value.trim();
+        try {
+          await api(
+            `/reviews/${productId}`,
+            "POST",
+            { rating: selectedRating, comment },
+            true,
+          );
+          showToast("Review submitted! ", "success");
+          document.getElementById("review-comment").value = "";
+          selectedRating = 0;
+          document.querySelectorAll(".star-btn").forEach((s) => {
+            s.style.opacity = "0.3";
+            s.style.color = "";
+          });
+          loadReviews();
+          loadProduct();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      };
+
+      const loadReviews = async () => {
+        const list = document.getElementById("reviews-list");
+        try {
+          const reviews = await api(`/reviews/${productId}`);
+          if (!reviews.length) {
+            list.innerHTML = `<div class="empty-state">
+            <div class="icon">
+               </div>
+               <h3>No reviews yet</h3>
+               <p>Be the first to review this product.</p>
+               </div>`;
+            return;
+          }
+          const currentUser = getUser();
+          list.innerHTML = reviews
+            .map((r) => {
+              const reviewerId = r.customer?._id || r.customer || "";
+              const myId = currentUser ? currentUser._id || "" : "";
+              const isMyReview =
+                myId && reviewerId && myId.toString() === reviewerId.toString();
+              const isLoggedInUser = currentUser !== null;
+              let actionBtn = "";
+
+              if (r.isFlagged) {
+                actionBtn = `<span style="font-size:0.68rem;padding:0.2rem 0.6rem;border-radius:50px;background:rgba(216,160,49,0.15);color:var(--mustard);font-weight:600;">⚑ Flagged</span>`;
+              } else if (isLoggedInUser && !isMyReview) {
+                actionBtn = `<button onclick="flagReview('${r._id}')" style="font-size:0.7rem;padding:0.25rem 0.75rem;border-radius:50px;border:1.5px solid rgba(107,15,26,0.25);background:transparent;color:var(--brown);cursor:pointer;font-family:var(--font-body);">⚑ Report</button>`;
+              }
+              return ` <div class="testimonial-card" style="margin-bottom:1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+             <div class="testimonial-author">
+                <div class="testimonial-avatar" style="width:36px;height:36px;border-radius:50%;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">👤</div>
+                <div>
+                   <div class="testimonial-name">${r.customer?.name || "Customer"}</div>
+                    <div class="testimonial-location">${formatDate(r.createdAt)}</div>
+                     </div> 
+                     </div> 
+                     <div style="display:flex;align-items:center;gap:0.75rem;"> 
+                        <div class="stars" style="font-size:0.9rem;">${renderStars(r.rating)}</div> 
+                        ${actionBtn} 
+                        </div> 
+                        </div> 
+                        <p class="testimonial-text" style="margin:0;">${r.comment || ""}</p> 
+                        </div> 
+                        
+                        `;
+            })
+            .join("");
+        } catch (err) {
+          list.innerHTML =
+            '<p style="opacity:0.6;font-size:0.85rem;">Could not load reviews.</p>';
+        }
+      };
+
+      const flagReview = (reviewId) => {
+        if (!isLoggedIn()) {
+          showToast("Please log in to report a review", "error");
+          return;
+        }
+        const existing = document.getElementById("flag-modal");
+        if (existing) existing.remove();
+        const modal = document.createElement("div");
+        modal.id = "flag-modal";
+        modal.style.cssText = ` position:fixed;top:0;left:0;width:100%;height:100%; background:rgba(0,0,0,0.5);z-index:9999; display:flex;align-items:center;justify-content:center; padding:1rem; `;
+        modal.innerHTML = ` <div style=" background:var(--white);border-radius:16px; padding:2rem;max-width:440px;width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.2); ">
+             <h3 style="font-family:var(--font-head);color:var(--maroon);margin-bottom:0.5rem;font-size:1.3rem;">Report Review </h3>
+              <p style="font-size:0.82rem;opacity:0.65;margin-bottom:1.5rem;line-height:1.6;">Help us keep CRAFT BAZAAR a trusted community. Select why you are reporting this review. </p>
+               <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem;">
+                   ${[
+                     "Inappropriate or offensive language",
+                     "Fake or misleading review",
+                     "Spam or promotional content",
+                     "Irrelevant to this product",
+                     "Contains personal information",
+                     "Harassment or hate speech",
+                     "Other",
+                   ]
+                     .map(
+                       (reason, i) =>
+                         ` <label style=" display:flex;align-items:center;gap:0.75rem; padding:0.75rem 1rem;border-radius:10px; border:1.5px solid var(--light);cursor:pointer; font-size:0.85rem;transition:all 0.2s; " onmouseover="this.style.borderColor='var(--terracotta)';this.style.background='rgba(201,106,69,0.05)'" onmouseout="this.style.borderColor='var(--light)';this.style.background='transparent'" > <input type="radio" name="flag-reason" value="${reason}" style="accent-color:var(--maroon);width:16px;height:16px;" ${i === 0 ? "checked" : ""}> ${reason} </label> `,
+                     )
+                     .join(
+                       "",
+                     )} </div> <!-- Other text field --> <div id="other-field" style="display:none;margin-bottom:1.5rem;"> <textarea id="other-reason-text" placeholder="Please describe the issue..." style=" width:100%;padding:0.75rem 1rem; border:1.5px solid var(--light);border-radius:10px; font-family:var(--font-body);font-size:0.85rem; resize:vertical;min-height:80px;outline:none; color:var(--brown);background:var(--bg); "></textarea> </div> <div style="display:flex;gap:0.75rem;"> <button onclick="submitFlag('${reviewId}')" class="btn btn-primary" style="flex:1;">Submit Report </button> <button onclick="document.getElementById('flag-modal').remove()" class="btn btn-outline" style="flex:1;">Cancel </button> </div> </div> `;
+        document.body.appendChild(modal);
+        modal.querySelectorAll('input[name="flag-reason"]').forEach((radio) => {
+          radio.addEventListener("change", () => {
+            document.getElementById("other-field").style.display =
+              radio.value === "Other" ? "block" : "none";
+          });
+        });
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) modal.remove();
+        });
+      };
+      const submitFlag = async (reviewId) => {
+        const selected = document.querySelector(
+          'input[name="flag-reason"]:checked',
+        );
+        if (!selected) {
+          showToast("Please select a reason", "error");
+          return;
+        }
+        let reason = selected.value;
+        if (reason === "Other") {
+          const otherText = document
+            .getElementById("other-reason-text")
+            .value.trim();
+          if (!otherText) {
+            showToast("Please describe the issue", "error");
+            return;
+          }
+          reason = otherText;
+        }
+        const btn = document.querySelector("#flag-modal .btn-primary");
+        btn.textContent = "Submitting...";
+        btn.disabled = true;
+        try {
+          await api(`/reviews/${reviewId}/flag`, "PUT", { reason }, true);
+          document.getElementById("flag-modal").remove();
+          showToast("Review reported to admin ", "success");
+          loadReviews();
+        } catch (err) {
+          showToast(err.message, "error");
+          btn.textContent = "Submit Report";
+          btn.disabled = false;
+        }
+      };
+      loadProduct();
+    </script>
+  </body>
+</html>

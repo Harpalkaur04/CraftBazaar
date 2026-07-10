@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620">
+  <rect width="900" height="620" fill="#f8efe3"/>
+  <circle cx="450" cy="235" r="105" fill="#d69a3a"/>
+  <path d="M250 555c28-125 112-190 200-190s172 65 200 190z" fill="#6b0f1a"/>
+  <circle cx="410" cy="225" r="10" fill="#4a3428"/>
+  <circle cx="490" cy="225" r="10" fill="#4a3428"/>
+  <path d="M405 275c28 22 62 22 90 0" fill="none" stroke="#4a3428" stroke-width="10" stroke-linecap="round"/>
+  <text x="450" y="590" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#4a3428">Verified Artisan</text>
+</svg>

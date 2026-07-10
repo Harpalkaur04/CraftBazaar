@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login — CRAFT BAZAAR</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <!-- ── Search Overlay ──────────────────────────────────── -->
+  <div class="search-overlay" id="search-overlay">
+    <input
+      type="text"
+      placeholder="WHAT ARE YOU LOOKING FOR?"
+      id="search-input-overlay"
+      onkeydown="if (event.key === 'Enter') doSearch();"
+    />
+    <button class="search-close" onclick="toggleSearch()"></button>
+  </div>
+  <!-- ── Sidebar Overlay ─────────────────────────────────── -->
+  <div
+    class="sidebar-overlay"
+    id="sidebar-overlay"
+    onclick="toggleSidebar()"
+  ></div>
+  <!-- ── Sidebar Menu ────────────────────────────────────── -->
+  <div class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-logo">CRAFT BAZAAR</div>
+    <nav>
+      <a href="/index.html" class="sidebar-nav-item">Home <span>→</span></a>
+      <a href="/pages/explore.html" class="sidebar-nav-item"
+        >Explore <span>→</span></a
+      >
+      <a href="/pages/states.html" class="sidebar-nav-item"
+        >States <span>→</span></a
+      >
+      <a href="/pages/categories.html" class="sidebar-nav-item"
+        >Categories <span>→</span></a
+      >
+      <a href="/pages/about.html" class="sidebar-nav-item"
+        >About <span>→</span></a
+      >
+      <button
+        class="btn btn-outline"
+        style="margin-top: 1.2rem"
+        onclick="logout()"
+      >
+        Log Out
+      </button>
+    </nav>
+    <p class="sidebar-tagline">
+      A curated marketplace celebrating authentic Indian handicrafts from
+      artisans across every state of India.
+    </p>
+  </div>
+  <!-- ── Top Navbar ──────────────────────────────────────── -->
+  <nav class="zara-nav" id="zara-nav">
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()">
+      <span></span> <span></span>
+    </button>
+    <div class="nav-right">
+      <a class="nav-right-item" onclick="toggleSearch()">Search</a>
+      <a
+        class="nav-right-item"
+        href="/pages/cart.html"
+        style="position: relative"
+        >Bag
+        <span class="cart-count-badge cart-badge" style="display: none">0</span>
+      </a>
+      <a class="nav-right-item" id="nav-login-link" href="/pages/login.html"
+        >Log In</a
+      >
+      <a
+        class="nav-right-item"
+        id="nav-profile-link"
+        href="/pages/dashboard.html"
+        style="display: none"
+        >Account</a
+      >
+    </div>
+  </nav>
+  <body class="page-body">
+    <nav class="navbar scrolled">
+      <div class="container">
+        <div class="nav-inner">
+          <a class="nav-logo" href="/index.html">CRAFT BAZAAR</a>
+          <div class="nav-actions">
+            <a
+              class="nav-icon search-icon"
+              href="/pages/products.html"
+              title="Search"
+            >
+              <i class="ri-search-line"></i>
+            </a>
+            <a class="nav-icon" href="/pages/cart.html" title="Cart">
+              <i class="ri-shopping-cart-line"></i>
+              <span class="badge cart-badge" style="display: none">0</span>
+            </a>
+            <a
+              class="nav-icon"
+              id="auth-link"
+              href="/pages/login.html"
+              title="Login"
+            >
+              <i class="ri-user-line"></i>
+            </a>
+            <a
+              class="nav-icon"
+              id="profile-link"
+              href="/pages/dashboard.html"
+              title="Profile"
+              style="display: none"
+            >
+              <i class="ri-user-line"></i>
+            </a>
+            <button class="hamburger" aria-label="Menu">
+              <span></span> <span></span> <span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <!-- Tab: Login / Register -->
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.8rem">
+          <button
+            class="role-btn active"
+            id="tab-login"
+            onclick="switchTab('login')"
+          >
+            Log In
+          </button>
+          <button
+            class="role-btn"
+            id="tab-register"
+            onclick="switchTab('register')"
+          >
+            Sign Up
+          </button>
+        </div>
+        <!-- ── Login Form ────────────────────────────────── -->
+        <div id="login-form">
+          <h2>Welcome back</h2>
+          <p class="subtitle">Log in to your CRAFT BAZAAR account</p>
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="login-email"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="login-password"
+              placeholder="Your password"
+            />
+          </div>
+          <button
+            class="btn btn-primary"
+            style="width: 100%"
+            onclick="handleLogin()"
+          >
+            Log In
+          </button>
+          <p class="auth-footer">
+            Don't have an account?
+            <a href="#" onclick="switchTab('register')">Sign Up</a>
+          </p>
+        </div>
+        <!-- ── Register Form ─────────────────────────────── -->
+        <div id="register-form" style="display: none">
+          <h2>Join CRAFT BAZAAR</h2>
+          <p class="subtitle">Create your account</p>
+          <!-- Role toggle -->
+          <div class="role-toggle">
+            <div
+              class="role-btn active"
+              id="role-customer"
+              onclick="switchRole('customer')"
+            >
+              Customer
+            </div>
+            <div
+              class="role-btn"
+              id="role-artisan"
+              onclick="switchRole('artisan')"
+            >
+              Artisan / Seller
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="reg-name">Full Name *</label>
+            <input
+              type="text"
+              class="form-control"
+              id="reg-name"
+              placeholder="Your full name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="reg-email">Email *</label>
+            <input
+              type="email"
+              class="form-control"
+              id="reg-email"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Password *</label>
+            <input
+              type="password"
+              class="form-control"
+              id="reg-password"
+              placeholder="At least 6 characters"
+            />
+          </div>
+          <div class="form-group">
+            <label for="reg-phone">Phone Number</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="reg-phone"
+              placeholder="+91 98765 43210"
+            />
+          </div>
+          <!-- Artisan-only fields -->
+          <div id="artisan-fields" style="display: none">
+            <div class="form-group">
+              <label for="reg-shop">Shop / Studio Name *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="reg-shop"
+                placeholder="e.g. Kamla's Blue Pottery"
+              />
+            </div>
+            <div class="form-group">
+              <label for="reg-state">State (craft origin)</label>
+              <select class="form-control" id="reg-state">
+                <option value="">Select your state</option>
+                <option>Rajasthan</option>
+                <option>Gujarat</option>
+                <option>Uttar Pradesh</option>
+                <option>West Bengal</option>
+                <option>Jammu & Kashmir</option>
+                <option>Tamil Nadu</option>
+                <option>Odisha</option>
+                <option>Maharashtra</option>
+                <option>Karnataka</option>
+                <option>Madhya Pradesh</option>
+                <option>Himachal Pradesh</option>
+                <option>Bihar</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="reg-bio">Tell us about your craft</label>
+              <textarea
+                class="form-control"
+                id="reg-bio"
+                placeholder="Describe your craft tradition, how long you've been practicing, what makes your work special..."
+              ></textarea>
+            </div>
+          </div>
+          <button
+            class="btn btn-primary"
+            style="width: 100%; margin-top: 0.5rem"
+            onclick="handleRegister()"
+          >
+            Create Account
+          </button>
+          <p class="auth-footer">
+            Already have an account?
+            <a href="#" onclick="switchTab('login')">Log In</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <script src="../js/utils.js"></script>
+    <script>
+      let activeRole = "customer";
+      if (isLoggedIn()) {
+        const user = getUser();
+        if (user?.role === "admin") {
+          window.location.href = "/pages/admin.html";
+        } else if (user?.role === "artisan") {
+          window.location.href = "/pages/dashboard.html";
+        } else {
+          window.location.href = "/index.html";
+        }
+      }
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("role") === "artisan") {
+        switchTab("register");
+        switchRole("artisan");
+      }
+      const switchTab = (tab) => {
+        document.getElementById("login-form").style.display =
+          tab === "login" ? "block" : "none";
+        document.getElementById("register-form").style.display =
+          tab === "register" ? "block" : "none";
+        document
+          .getElementById("tab-login")
+          .classList.toggle("active", tab === "login");
+        document
+          .getElementById("tab-register")
+          .classList.toggle("active", tab === "register");
+      };
+      const switchRole = (role) => {
+        activeRole = role;
+        document
+          .getElementById("role-customer")
+          .classList.toggle("active", role === "customer");
+        document
+          .getElementById("role-artisan")
+          .classList.toggle("active", role === "artisan");
+        document.getElementById("artisan-fields").style.display =
+          role === "artisan" ? "block" : "none";
+      };
+      const handleLogin = async () => {
+        const email = document.getElementById("login-email").value.trim();
+        const password = document.getElementById("login-password").value;
+        if (!email || !password) {
+          showToast("Please fill all fields", "error");
+          return;
+        }
+        const btn = document.querySelector("#login-form .btn-primary");
+        btn.textContent = "Logging in...";
+        btn.disabled = true;
+        try {
+          const data = await api("/auth/login", "POST", { email, password });
+          saveAuth(data.token, {
+            _id: data._id,
+            name: data.name,
+            email: data.email,
+            role: data.role,
+          });
+          showToast(`Welcome back, ${data.name}! `, "success");
+          setTimeout(() => {
+            if (data.role === "admin") {
+              window.location.href = "/pages/admin.html";
+            } else if (data.role === "artisan") {
+              window.location.href = "/pages/dashboard.html";
+            } else {
+              window.location.href = "/index.html";
+            }
+          }, 800);
+        } catch (err) {
+          showToast(err.message, "error");
+          btn.textContent = "Log In";
+          btn.disabled = false;
+        }
+      };
+      const handleRegister = async () => {
+        const name = document.getElementById("reg-name").value.trim();
+        const email = document.getElementById("reg-email").value.trim();
+        const password = document.getElementById("reg-password").value;
+        const phone = document.getElementById("reg-phone").value.trim();
+        const shopName = document.getElementById("reg-shop")?.value.trim();
+        const state = document.getElementById("reg-state")?.value;
+        const bio = document.getElementById("reg-bio")?.value.trim();
+        if (!name || !email || !password) {
+          showToast("Name, email and password are required", "error");
+          return;
+        }
+        if (password.length < 6) {
+          showToast("Password must be at least 6 characters", "error");
+          return;
+        }
+        const btn = document.querySelector("#register-form .btn-primary");
+        btn.textContent = "Creating account...";
+        btn.disabled = true;
+        try {
+          const body = { name, email, password, role: activeRole, phone };
+          if (activeRole === "artisan") {
+            body.shopName = shopName;
+            body.state = state;
+            body.bio = bio;
+          }
+          const data = await api("/auth/register", "POST", body);
+          saveAuth(data.token, {
+            _id: data._id,
+            name: data.name,
+            email: data.email,
+            role: data.role,
+          });
+          showToast(`Welcome to CRAFT BAZAAR, ${data.name}! `, "success");
+          setTimeout(() => {
+            if (data.role === "admin") {
+              window.location.href = "/pages/admin.html";
+            } else if (data.role === "artisan") {
+              window.location.href = "/pages/dashboard.html";
+            } else {
+              window.location.href = "/index.html";
+            }
+          }, 800);
+        } catch (err) {
+          showToast(err.message, "error");
+          btn.textContent = "Create Account";
+          btn.disabled = false;
+        }
+      };
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const activeForm =
+            document.getElementById("login-form").style.display !== "none";
+          if (activeForm) handleLogin();
+        }
+      });
+    </script>
+  </body>
+</html>

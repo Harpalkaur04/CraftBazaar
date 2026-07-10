@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explore Crafts — CRAFT BAZAAR</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <!-- ── Search Overlay ──────────────────────────────────── -->
+  <div class="search-overlay" id="search-overlay">
+    <input
+      type="text"
+      placeholder="WHAT ARE YOU LOOKING FOR?"
+      id="search-input-overlay"
+      onkeydown="if (event.key === 'Enter') doSearch();"
+    />
+    <button class="search-close" onclick="toggleSearch()"></button>
+  </div>
+  <!-- ── Sidebar Overlay ─────────────────────────────────── -->
+  <div
+    class="sidebar-overlay"
+    id="sidebar-overlay"
+    onclick="toggleSidebar()"
+  ></div>
+  <!-- ── Sidebar Menu ────────────────────────────────────── -->
+  <div class="sidebar-menu" id="sidebar-menu">
+    <div class="sidebar-logo">CRAFT BAZAAR</div>
+    <nav>
+      <a href="/index.html" class="sidebar-nav-item">Home <span>→</span></a>
+      <a href="/pages/explore.html" class="sidebar-nav-item"
+        >Explore <span>→</span></a
+      >
+      <a href="/pages/states.html" class="sidebar-nav-item"
+        >States <span>→</span></a
+      >
+      <a href="/pages/categories.html" class="sidebar-nav-item"
+        >Categories <span>→</span></a
+      >
+      <a href="/pages/about.html" class="sidebar-nav-item"
+        >About <span>→</span></a
+      >
+      <button
+        class="btn btn-outline"
+        style="margin-top: 1.2rem"
+        onclick="logout()"
+      >
+        Log Out
+      </button>
+    </nav>
+    <p class="sidebar-tagline">
+      A curated marketplace celebrating authentic Indian handicrafts from
+      artisans across every state of India.
+    </p>
+  </div>
+  <!-- ── Top Navbar ──────────────────────────────────────── -->
+  <nav class="zara-nav" id="zara-nav">
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()">
+      <span></span> <span></span>
+    </button>
+    <div class="nav-right">
+      <a class="nav-right-item" onclick="toggleSearch()">Search</a>
+      <a
+        class="nav-right-item"
+        href="/pages/cart.html"
+        style="position: relative"
+        >Bag
+        <span class="cart-count-badge cart-badge" style="display: none">0</span>
+      </a>
+      <a class="nav-right-item" id="nav-login-link" href="/pages/login.html"
+        >Log In</a
+      >
+      <a
+        class="nav-right-item"
+        id="nav-profile-link"
+        href="/pages/dashboard.html"
+        style="display: none"
+        >Account</a
+      >
+    </div>
+  </nav>
+  <body class="page-body">
+    <!-- ── Navbar ─────────────────────────────────────────── -->
+    <!-- ── Page Header ────────────────────────────────────── -->
+    <div style="padding-top: 5.5rem; padding-bottom: 2rem; background: black">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="/index.html" style="color: white">Home</a> <span>›</span>
+          <a href="#" style="color: white">Explore</a>
+        </div>
+        <h1 style="font-size: clamp(1.8rem, 4vw, 2.8rem); color: white">
+          Explore Handmade Crafts
+        </h1>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem; color: white">
+          Discover authentic pieces crafted by India's finest artisans
+        </p>
+      </div>
+    </div>
+    <!-- ── Categories Strip ────────────────────────────────── -->
+    <div
+      style="padding: 1.5rem 0; border-bottom: 1px solid rgba(74, 52, 40, 0.08)"
+    >
+      <div class="container">
+        <div class="categories-scroll" id="cat-strip">
+          <div class="category-chip active" data-cat="">All</div>
+          <div class="category-chip" data-cat="textiles">Textiles</div>
+          <div class="category-chip" data-cat="jewellery">Jewellery</div>
+          <div class="category-chip" data-cat="pottery">Pottery</div>
+          <div class="category-chip" data-cat="home-decor">Home Decor</div>
+          <div class="category-chip" data-cat="footwear-leather">Footwear</div>
+          <div class="category-chip" data-cat="paintings">Paintings</div>
+          <div class="category-chip" data-cat="carpets-rugs">Carpets</div>
+          <div class="category-chip" data-cat="toys-puppets">Toys</div>
+        </div>
+      </div>
+    </div>
+    <!-- ── Main Content ────────────────────────────────────── -->
+    <section class="section" style="padding-top: 2rem">
+      <div class="container">
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <input
+            type="text"
+            id="search-input"
+            placeholder=" WHAT ARE YOU LOOKING FOR?"
+          />
+          <select id="filter-state">
+            <option value="">All States</option>
+            <option value="Rajasthan">Rajasthan</option>
+            <option value="Gujarat">Gujarat</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+            <option value="West Bengal">West Bengal</option>
+            <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Odisha">Odisha</option>
+          </select>
+          <select id="filter-sort">
+            <option value="">Sort: Newest</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+          <button class="btn btn-primary" onclick="applyFilters()">
+            Apply
+          </button>
+          <button class="btn btn-outline" onclick="clearFilters()">
+            Clear
+          </button>
+        </div>
+        <!-- Results Info -->
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+          "
+        >
+          <p style="font-size: 0.82rem; opacity: 0.65" id="results-count">
+            Loading...
+          </p>
+        </div>
+        <!-- Products Grid -->
+        <div class="products-grid" id="products-grid">
+          <div style="grid-column: 1/-1"><div class="spinner"></div></div>
+        </div>
+        <!-- Pagination -->
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 3rem;
+          "
+          id="pagination"
+        ></div>
+      </div>
+    </section>
+    <!-- ── Footer ──────────────────────────────────────────── -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-bottom" style="border-top: none; padding-top: 0">
+          <span>© 2026 CRAFT BAZAAR. Made for India's artisans.</span>
+          <a
+            href="/index.html"
+            style="color: rgba(255, 255, 255, 0.6); font-size: 0.8rem"
+            >← Back to Home</a
+          >
+        </div>
+      </div>
+    </footer>
+    <script src="../js/utils.js"></script>
+    <script>
+      let currentPage = 1;
+      let activeCategory = "";
+      const LIMIT = 12;
+      // ── Read URL params on load ──────────────────────────────
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("category")) {
+        activeCategory = params.get("category");
+        document.querySelectorAll(".category-chip").forEach((c) => {
+          c.classList.toggle("active", c.dataset.cat === activeCategory);
+        });
+      }
+      if (params.get("state")) {
+        document.getElementById("filter-state").value = params.get("state");
+      }
+      if (params.get("keyword")) {
+        document.getElementById("search-input").value = params.get("keyword");
+      }
+      // ── Category chip clicks ─────────────────────────────────
+      document.querySelectorAll(".category-chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          document
+            .querySelectorAll(".category-chip")
+            .forEach((c) => c.classList.remove("active"));
+          chip.classList.add("active");
+          activeCategory = chip.dataset.cat || "";
+          currentPage = 1;
+          loadProducts();
+        });
+      });
+      // ── Build query string ────────────────────────────────────
+      const buildQuery = () => {
+        const keyword = document.getElementById("search-input").value.trim();
+        const state = document.getElementById("filter-state").value;
+        const sort = document.getElementById("filter-sort").value;
+        let q = `?page=${currentPage}&limit=${LIMIT}`;
+        if (keyword) q += `&keyword=${encodeURIComponent(keyword)}`;
+        if (activeCategory) q += `&category=${activeCategory}`;
+        if (state) q += `&state=${encodeURIComponent(state)}`;
+        return q;
+      };
+      // ── Load products ─────────────────────────────────────────
+      const loadProducts = async () => {
+        const grid = document.getElementById("products-grid");
+        const countEl = document.getElementById("results-count");
+        grid.innerHTML =
+          '<div style="grid-column:1/-1;"><div class="spinner"></div></div>';
+        try {
+          const data = await api(`/products${buildQuery()}`);
+          countEl.textContent = `${data.totalProducts} crafts found`;
+          if (!data.products.length) {
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"> <div class="icon"></div> <h3>No crafts found</h3> <p>Try adjusting your filters or search terms.</p> </div>`;
+            return;
+          }
+          grid.innerHTML = data.products.map(productCardHTML).join("");
+          renderPagination(data.page, data.totalPages);
+        } catch (err) {
+          grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"> <div class="icon"></div> <h3>Could not load products</h3> <p>Make sure the backend server is running.</p> </div>`;
+          countEl.textContent = "";
+        }
+      };
+      // ── Filters ───────────────────────────────────────────────
+      const applyFilters = () => {
+        currentPage = 1;
+        loadProducts();
+      };
+      const clearFilters = () => {
+        document.getElementById("search-input").value = "";
+        document.getElementById("filter-state").value = "";
+        document.getElementById("filter-sort").value = "";
+        activeCategory = "";
+        document
+          .querySelectorAll(".category-chip")
+          .forEach((c) => c.classList.remove("active"));
+        document.querySelector(".category-chip").classList.add("active");
+        currentPage = 1;
+        loadProducts();
+      };
+      document
+        .getElementById("search-input")
+        .addEventListener("keydown", (e) => {
+          if (e.key === "Enter") applyFilters();
+        });
+      // ── Pagination ────────────────────────────────────────────
+      const renderPagination = (page, total) => {
+        const container = document.getElementById("pagination");
+        if (total <= 1) {
+          container.innerHTML = "";
+          return;
+        }
+        let html = "";
+        for (let i = 1; i <= total; i++) {
+          html += `<button onclick="goToPage(${i})" style=" width:36px; height:36px; border-radius:50%; border: 2px solid ${i === page ? "var(--maroon)" : "var(--light)"}; background: ${i === page ? "var(--maroon)" : "var(--white)"}; color: ${i === page ? "white" : "var(--brown)"}; font-size:0.8rem; cursor:pointer; transition: all 0.2s; ">${i}</button>`;
+        }
+        container.innerHTML = html;
+      };
+      const goToPage = (page) => {
+        currentPage = page;
+        loadProducts();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+      // ── Init ─────────────────────────────────────────────────
+      loadProducts();
+    </script>
+  </body>
+</html>

@@ -10,123 +10,11 @@
       rel="stylesheet"
     />
   </head>
-  <!-- ── Search Overlay ──────────────────────────────────── -->
-  <div class="search-overlay" id="search-overlay">
-    <input
-      type="text"
-      placeholder="WHAT ARE YOU LOOKING FOR?"
-      id="search-input-overlay"
-      onkeydown="if (event.key === 'Enter') doSearch();"
-    />
-    <button class="search-close" onclick="toggleSearch()"></button>
-  </div>
-  <!-- ── Sidebar Overlay ─────────────────────────────────── -->
-  <div
-    class="sidebar-overlay"
-    id="sidebar-overlay"
-    onclick="toggleSidebar()"
-  ></div>
-  <!-- ── Sidebar Menu ────────────────────────────────────── -->
-  <div class="sidebar-menu" id="sidebar-menu">
-    <div class="sidebar-logo">CRAFT BAZAAR</div>
-    <nav>
-      <a href="/index.html" class="sidebar-nav-item">Home <span>→</span></a>
-      <a href="/pages/explore.html" class="sidebar-nav-item"
-        >Explore <span>→</span></a
-      >
-      <a href="/pages/states.html" class="sidebar-nav-item"
-        >States <span>→</span></a
-      >
-      <a href="/pages/categories.html" class="sidebar-nav-item"
-        >Categories <span>→</span></a
-      >
-      <a href="/pages/about.html" class="sidebar-nav-item"
-        >About <span>→</span></a
-      >
-      <button
-        class="btn btn-outline"
-        style="margin-top: 1.2rem"
-        onclick="logout()"
-      >
-        Log Out
-      </button>
-    </nav>
-    <p class="sidebar-tagline">
-      A curated marketplace celebrating authentic Indian handicrafts from
-      artisans across every state of India.
-    </p>
-  </div>
-  <!-- ── Top Navbar ──────────────────────────────────────── -->
-  <nav class="zara-nav" id="zara-nav">
-    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()">
-      <span></span> <span></span>
-    </button>
-    <div class="nav-right">
-      <a class="nav-right-item" onclick="toggleSearch()">Search</a>
-      <a
-        class="nav-right-item"
-        href="/pages/cart.html"
-        style="position: relative"
-        >Bag
-        <span class="cart-count-badge cart-badge" style="display: none">0</span>
-      </a>
-      <a class="nav-right-item" id="nav-login-link" href="/pages/login.html"
-        >Log In</a
-      >
-      <a
-        class="nav-right-item"
-        id="nav-profile-link"
-        href="/pages/dashboard.html"
-        style="display: none"
-        >Account</a
-      >
-    </div>
-  </nav>
-  <body class="page-body">
-    <nav class="navbar scrolled">
-      <div class="container">
-        <div class="nav-inner">
-          <a class="nav-logo" href="/index.html">CRAFT BAZAAR</a>
-          <div class="nav-actions">
-            <a
-              class="nav-icon search-icon"
-              href="/pages/products.html"
-              title="Search"
-            >
-              <i class="ri-search-line"></i>
-            </a>
-            <a class="nav-icon" href="/pages/cart.html" title="Cart">
-              <i class="ri-shopping-cart-line"></i>
-              <span class="badge cart-badge" style="display: none">0</span>
-            </a>
-            <a
-              class="nav-icon"
-              id="auth-link"
-              href="/pages/login.html"
-              title="Login"
-            >
-              <i class="ri-user-line"></i>
-            </a>
-            <a
-              class="nav-icon"
-              id="profile-link"
-              href="/pages/dashboard.html"
-              title="Profile"
-              style="display: none"
-            >
-              <i class="ri-user-line"></i>
-            </a>
-            <button class="hamburger" aria-label="Menu">
-              <span></span> <span></span> <span></span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
+  
     <div class="auth-wrap">
       <div class="auth-card">
         <!-- Tab: Login / Register -->
-        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.8rem">
+        <div style="display: flex; gap: 1.5rem; margin-bottom: 1.8rem">
           <button
             class="role-btn active"
             id="tab-login"
@@ -285,6 +173,7 @@
           </p>
         </div>
       </div>
+      <aside class="auth-side-image" aria-hidden="true"></aside>
     </div>
     <script src="../js/utils.js"></script>
     <script>

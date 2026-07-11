@@ -31,6 +31,7 @@ app.use("/api/products", require("./routes/productRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/newsletter", require("./routes/newsletterRoutes"));
 
 // Base route — just to confirm server is running
 app.get("/", (req, res) => {

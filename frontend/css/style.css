@@ -2100,8 +2100,8 @@ body::after {
   flex: 1;
   border: none;
   background: transparent;
-  font-family: var(--font-head);
-  font-size: 1.5rem;
+  font-family: inherit;
+  font-size: 1rem;
   color: var(--maroon);
   outline: none;
 }
@@ -2127,4 +2127,18 @@ body::after {
 /* Hide old navbar when zara navbar is present */
 .navbar {
   display: none !important;
+}
+
+
+/* ── FORCE WHITE BACKGROUND EVERYWHERE ── */
+html, body {
+  background: #FFFFFF !important;
+  background-image: none !important;
+}
+body::before, body::after {
+  display: none !important;
+}
+.page-body {
+  background: #FFFFFF !important;
+  background-image: none !important;
 }

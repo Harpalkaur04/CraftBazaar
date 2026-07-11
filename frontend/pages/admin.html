@@ -130,6 +130,44 @@
           position: static;
         }
       }
+
+      /* Newsletter css  */
+      #panel-newsletter {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px var(--shadow);
+  max-width: 100%;
+}
+
+#panel-newsletter h2 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin-bottom: 0.5rem;
+}
+
+#panel-newsletter p {
+  font-size: 0.88rem;
+  opacity: 0.68;
+  margin-bottom: 1.5rem;
+}
+
+#newsletter-subscribers-list .data-table {
+  background: var(--white);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#newsletter-subscribers-list .data-table th,
+#newsletter-subscribers-list .data-table td {
+  padding: 1rem 1.2rem;
+}
+
+#newsletter-subscribers-list .action-btn.danger {
+  background: rgba(107, 15, 26, 0.1);
+  color: var(--maroon);
+  border-radius: 8px;
+  padding: 0.45rem 0.9rem;
+}
     </style>
   </head>
   <!-- ── Search Overlay ──────────────────────────────────── -->
@@ -279,6 +317,7 @@
           <a href="#" onclick="showPanel('verify')">✅ Verify Handmade</a>
           <a href="#" onclick="showPanel('artisans')">👨‍🎨 Approve Artisans</a>
           <a href="#" onclick="showPanel('flagged')">🚩 Flagged Reviews</a>
+          <a href="#" onclick="showPanel('newsletter')">✉️ Newsletter</a>
         </nav>
       </aside>
 
@@ -511,9 +550,19 @@
             and decide to keep or remove.
           </p>
           <div id="flagged-reviews-list"><div class="spinner"></div></div>
+          
         </div>
+        <!-- Newsletter Panel -->
+     <div id="panel-newsletter" style="display:none;">
+  <h2 style="margin-bottom:0.5rem;">Newsletter Subscribers</h2>
+  <p style="font-size:0.85rem;opacity:0.65;margin-bottom:1.5rem;">
+    Emails subscribed from the home page newsletter form. Unsubscribed emails are removed automatically.
+  </p>
+  <div id="newsletter-subscribers-list"><div class="spinner"></div></div>
+</div>
       </main>
     </div>
+    
 
     <div style="height: 3rem"></div>
 
@@ -637,6 +686,7 @@
           "verify",
           "artisans",
           "flagged",
+          'newsletter'
         ];
         const links = document.querySelectorAll(".admin-nav a");
         const idx = panels.indexOf(name);
@@ -648,6 +698,7 @@
         if (name === "verify") loadVerify();
         if (name === "artisans") loadArtisans("pending");
         if (name === "flagged") loadFlaggedReviews();
+        if (name === 'newsletter') loadNewsletterSubscribers();
       };
 
       const loadOverview = async () => {
@@ -1117,6 +1168,61 @@
           showToast(err.message, "error");
         }
       };
+
+
+      const loadNewsletterSubscribers = async () => {
+  const wrap = document.getElementById('newsletter-subscribers-list');
+  wrap.innerHTML = '<div class="spinner"></div>';
+
+  try {
+    const subscribers = await api('/newsletter', 'GET', null, true);
+
+    if (!subscribers.length) {
+      wrap.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">@</div>
+          <h3>No newsletter subscribers</h3>
+          <p>New subscriber emails will appear here.</p>
+        </div>`;
+      return;
+    }
+
+    wrap.innerHTML = `<div style="overflow-x:auto;"><table class="data-table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Subscribed On</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${subscribers.map(s => `<tr>
+          <td style="font-size:0.85rem;font-weight:600;color:var(--maroon);">${s.email}</td>
+          <td style="font-size:0.8rem;opacity:0.7;">${formatDate(s.createdAt)}</td>
+          <td>
+            <button class="action-btn danger" onclick="removeNewsletterSubscriber('${s._id}')">
+              Remove
+            </button>
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+  } catch (err) {
+    wrap.innerHTML = '<p style="opacity:0.6;">Could not load newsletter subscribers.</p>';
+  }
+};
+
+const removeNewsletterSubscriber = async (id) => {
+  if (!confirm('Remove this email from the newsletter list?')) return;
+
+  try {
+    await api(`/newsletter/${id}`, 'DELETE', null, true);
+    showToast('Subscriber removed', 'success');
+    loadNewsletterSubscribers();
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+};
 
       showPanel("overview");
     </script>

@@ -1,7 +1,7 @@
 // js/utils.js
 // Shared utilities for craftbazaar frontend
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://craftbazaar-backend.onrender.com/api";
 
 /* ── Auth Helpers ─────────────────────────────────────────── */
 const getToken = () => localStorage.getItem("cb_token");

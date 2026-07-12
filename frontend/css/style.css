@@ -417,13 +417,8 @@ h4 {
   }
 }
 
-/* ── Product Cards ────────────────────────────────────────── */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.8rem;
-}
-/* ── Product Cards — India Craft House style ──────────── */
+
+/* ── Product Cards  ──────────── */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -447,7 +442,7 @@ h4 {
 
 .product-card-img {
   position: relative;
-  height: 350px;
+  height:420px;
   overflow: hidden;
   background: var(--light);
   /* border-radius: 8px; */
@@ -480,7 +475,11 @@ h4 {
 }
 
 .product-card-badge.verified {
-  background: var(--emerald);
+  background:#000;
+  color:#fff;
+  padding:6px 12px;
+  font-size:.65rem;
+ 
 }
 
 .product-wishlist-btn {
@@ -501,6 +500,7 @@ h4 {
   cursor: pointer;
   color: var(--brown);
   backdrop-filter: blur(4px);
+  
 }
 
 .product-wishlist-btn:hover {
@@ -586,6 +586,12 @@ h4 {
 }
 .stars {
   color: var(--mustard);
+}
+
+.product-card-category,
+.product-card-artisan,
+.product-card-footer{
+    display:none;
 }
 
 /* ── Section Heading ──────────────────────────────────────── */
@@ -1236,16 +1242,23 @@ textarea.form-control {
 }
 
 .auth-card {
-  width: min(100%, 530px);
-  max-width: none;
-  min-height: 100vh;
-  background: #fff;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 3rem 9.5vw 3rem;
+  width: 100%;
+  max-width: 530px;
+
+  margin: 0 auto;
+
+  padding: 3rem 4rem;
+
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+
+  font-family: "Helvetica Now Text",
+                 "Helvetica Now Text Fallback: Arial",
+                 "Helvetica Now Text Fallback: Helvetica",
+                 Arial,
+                 Helvetica,
+                 sans-serif;
 }
 
 .auth-card::before {
@@ -1329,6 +1342,9 @@ textarea.form-control {
   cursor: pointer;
   box-shadow: none;
   transition: background 0.18s ease, color 0.18s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .auth-card .btn:hover,

@@ -280,8 +280,8 @@
                   font-size: 0.85rem;
                 "
               >
-                <input type="radio" name="payment" value="cod" checked />Cash on
-                Delivery
+                <input type="radio" name="payment" value="cod" checked />
+                🚚 Cash on Delivery
               </label>
               <label
                 style="
@@ -292,9 +292,24 @@
                   font-size: 0.85rem;
                 "
               >
-                <input type="radio" name="payment" value="online" />Online
-                Payment (Mock)
+                <input type="radio" name="payment" value="online" />
+                💳 Pay Online (UPI / Card / Netbanking)
               </label>
+            </div>
+            <div
+              id="payment-info"
+              style="
+                margin-top: 0.75rem;
+                padding: 0.75rem;
+                background: var(--bg);
+                border-radius: 8px;
+                font-size: 0.78rem;
+                opacity: 0.7;
+                display: none;
+              "
+            >
+              🔒 Secure payment via Razorpay — UPI, Credit/Debit Card,
+              Netbanking accepted
             </div>
           </div>
           <div style="display: flex; gap: 1rem; margin-top: 1.5rem">
@@ -540,21 +555,17 @@
       const placeOrderHandler = async () => {
         if (!isLoggedIn()) {
           showToast("Please log in to place an order", "error");
-
-          setTimeout(() => {
-            window.location.href = "/pages/login.html";
-          }, 1200);
-
+          setTimeout(() => (window.location.href = "/pages/login.html"), 1200);
           return;
         }
 
         const user = getUser();
-
         if (user.role === "artisan") {
           showToast("Use a customer account to place orders", "error");
           return;
         }
 
+        // Validate shipping fields
         const name = document.getElementById("s-name").value.trim();
         const address = document.getElementById("s-address").value.trim();
         const city = document.getElementById("s-city").value.trim();
@@ -566,7 +577,6 @@
           showToast("Please fill all shipping fields", "error");
           return;
         }
-
         if (pincode.length !== 6 || isNaN(pincode)) {
           showToast("Enter a valid 6-digit pincode", "error");
           return;
@@ -575,48 +585,156 @@
         const paymentMethod = document.querySelector(
           'input[name="payment"]:checked',
         ).value;
-
         const cart = getCart();
+        const total = getCartTotal();
 
-        const btn = document.querySelector("#step-checkout .btn-primary");
-
-        btn.textContent = "Placing order...";
-        btn.disabled = true;
-
-        try {
-          const order = await api(
-            "/orders",
-            "POST",
-            {
-              items: cart.map((i) => ({
-                product: i._id,
-                quantity: i.quantity,
-              })),
-
-              shippingAddress: {
-                fullName: name,
-                addressLine: address,
-                city,
-                state,
-                pincode,
-                phone,
+        // ── COD flow ─────────────────────────────────────────────
+        if (paymentMethod === "cod") {
+          const btn = document.querySelector("#step-checkout .btn-primary");
+          btn.textContent = "Placing order...";
+          btn.disabled = true;
+          try {
+            const order = await api(
+              "/orders",
+              "POST",
+              {
+                items: cart.map((i) => ({
+                  product: i._id,
+                  quantity: i.quantity,
+                })),
+                shippingAddress: {
+                  fullName: name,
+                  addressLine: address,
+                  city,
+                  state,
+                  pincode,
+                  phone,
+                },
+                paymentMethod: "cod",
               },
+              true,
+            );
+            clearCart();
+            document.getElementById("confirmed-order-id").textContent =
+              order._id;
+            showStep("confirm");
+            showToast("Order placed! 🎉", "success");
+          } catch (err) {
+            showToast(err.message, "error");
+            btn.textContent = "Place Order →";
+            btn.disabled = false;
+          }
+          return;
+        }
 
-              paymentMethod,
-            },
+        // ── Online payment flow (Razorpay) ────────────────────────
+        try {
+          const btn = document.querySelector("#step-checkout .btn-primary");
+          btn.textContent = "Opening payment...";
+          btn.disabled = true;
+
+          // Step 1: Create Razorpay order from backend
+          const razorpayOrder = await api(
+            "/payment/create-order",
+            "POST",
+            { amount: total },
             true,
           );
 
-          clearCart();
+          // Step 2: Open Razorpay checkout
+          const options = {
+            key: razorpayOrder.keyId,
+            amount: razorpayOrder.amount,
+            currency: razorpayOrder.currency,
+            name: "craftbazaar",
+            description: "Handmade Products Payment",
+            order_id: razorpayOrder.orderId,
+            prefill: {
+              name: user.name,
+              contact: phone,
+            },
+            theme: {
+              color: "#000000", 
+            },
+            handler: async (response) => {
+              // Step 3: Verify payment on backend
+              try {
+                await api(
+                  "/payment/verify",
+                  "POST",
+                  {
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature,
+                  },
+                  true,
+                );
 
-          document.getElementById("confirmed-order-id").textContent = order._id;
+                // Step 4: Place order in our DB after payment verified
+                const order = await api(
+                  "/orders",
+                  "POST",
+                  {
+                    items: cart.map((i) => ({
+                      product: i._id,
+                      quantity: i.quantity,
+                    })),
+                    shippingAddress: {
+                      fullName: name,
+                      addressLine: address,
+                      city,
+                      state,
+                      pincode,
+                      phone,
+                    },
+                    paymentMethod: "online",
+                    paymentStatus: "paid",
+                    razorpayPaymentId: response.razorpay_payment_id,
+                    razorpayOrderId: response.razorpay_order_id,
+                  },
+                  true,
+                );
 
-          showStep("confirm");
+                clearCart();
+                document.getElementById("confirmed-order-id").textContent =
+                  order._id;
+                showStep("confirm");
+                showToast("Payment successful! Order placed 🎉", "success");
+              } catch (err) {
+                showToast(
+                  "Payment verification failed. Contact support.",
+                  "error",
+                );
+              }
+            },
+            modal: {
+              ondismiss: () => {
+                showToast("Payment cancelled", "error");
+                btn.textContent = "Place Order →";
+                btn.disabled = false;
+              },
+            },
+          };
 
-          showToast("Order placed! ", "success");
+          // Load Razorpay script dynamically
+          const rzpScript = document.createElement("script");
+          rzpScript.src = "https://checkout.razorpay.com/v1/checkout.js";
+          rzpScript.onload = () => {
+            const rzp = new Razorpay(options);
+            rzp.on("payment.failed", (response) => {
+              showToast(
+                `Payment failed: ${response.error.description}`,
+                "error",
+              );
+              btn.textContent = "Place Order →";
+              btn.disabled = false;
+            });
+            rzp.open();
+          };
+          document.body.appendChild(rzpScript);
         } catch (err) {
           showToast(err.message, "error");
-
+          const btn = document.querySelector("#step-checkout .btn-primary");
           btn.textContent = "Place Order →";
           btn.disabled = false;
         }
@@ -624,6 +742,15 @@
 
       renderCart();
       showStep("cart");
+
+      // ── Payment info toggle ───────────────────────────────
+      document.querySelectorAll('input[name="payment"]').forEach((radio) => {
+        radio.addEventListener("change", () => {
+          const info = document.getElementById("payment-info");
+          if (info)
+            info.style.display = radio.value === "online" ? "block" : "none";
+        });
+      });
     </script>
   </body>
 </html>

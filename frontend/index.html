@@ -6,7 +6,7 @@
     <title>CRAFT BAZAAR — Celebrating India's Handmade Heritage</title>
     <link rel="stylesheet" href="css/style.css" />
     <style>
-      /* ── Zara-style layout ─────────────────────────────── */
+      
       * {
         margin: 0;
         padding: 0;
@@ -19,54 +19,7 @@
         overflow-x: hidden;
       }
 
-      /* ── TOP NAVBAR ─────────────────────────────────────── */
-      /* .zara-nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 2rem;
-      background: transparent;
-      transition: background 0.3s ease;
-    }
-
-    .zara-nav.scrolled {
-      background: rgba(248,239,227,0.96);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 20px rgba(74,52,40,0.08);
-    } */
-
-      /* Hamburger — left side  2 lines only */
-      /* .hamburger-btn {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 4px;
-  z-index: 1100;
-}
-
-.hamburger-btn span {
-  display: block;
-  width: 100px;
-  height: 2px;
-  background: var(--maroon);
-  transition: all 0.35s ease;
-  transform-origin: center;
-}
-
-/* X animation on open */
-      /* .hamburger-btn.open span:nth-child(1) {
-  transform: translateY(5px) rotate(45deg);
-}
-.hamburger-btn.open span:nth-child(2) {
-  transform: translateY(-5px) rotate(-45deg);
-}  */
-
+      
       /* Right nav icons */
       .nav-right {
         display: flex;
@@ -240,8 +193,8 @@
         opacity: 1;
       }
 
-      /* ── HERO SECTION — ZARA SPLIT ──────────────────────── */
-      .hero-zara {
+      /* ── HERO SECTION — SPLIT ──────────────────────── */
+      .hero-new {
         display: grid;
         grid-template-columns: 1fr 1fr;
         min-height: 100vh;
@@ -286,7 +239,7 @@
         font-style: oblique;
       }
 
-      .hero-stats-zara {
+      .hero-stats-new {
         display: flex;
         gap: 2rem;
         padding-top: 2rem;
@@ -396,7 +349,7 @@
 
       /* ── Responsive ─────────────────────────────────────── */
       @media (max-width: 768px) {
-        .hero-zara {
+        .hero-new {
           grid-template-columns: 1fr;
           min-height: auto;
         }
@@ -477,7 +430,7 @@
     </div>
 
     <!-- ── Top Navbar ──────────────────────────────────────── -->
-    <nav class="zara-nav" id="zara-nav">
+    <nav class="new-nav" id="new-nav">
       <!-- Left: Hamburger -->
       <button
         class="hamburger-btn"
@@ -514,8 +467,8 @@
       </div>
     </nav>
 
-    <!-- ── Hero — Zara split layout ────────────────────────── -->
-    <section class="hero-zara">
+    <!-- ── Hero split layout ────────────────────────── -->
+    <section class="hero-new">
       <!-- Left: Brand + Details -->
       <div class="hero-left">
         <h1 class="hero-brand-text">CRAFT<br />BAZAAR</h1>
@@ -534,21 +487,7 @@
           <a href="/pages/about.html" class="btn btn-outline">Our Story</a>
         </div>
       </div>
-      <!-- <div class="hero-stats-zara">
-        <div class="hero-stat-item">
-          <span class="hero-stat-num">1,200+</span>
-          <span class="hero-stat-label">Artisans</span>
-        </div>
-        <div class="hero-stat-item">
-          <span class="hero-stat-num">8,000+</span>
-          <span class="hero-stat-label">Handmade Products</span>
-        </div>
-        <div class="hero-stat-item">
-          <span class="hero-stat-num">28</span>
-          <span class="hero-stat-label">States</span>
-        </div>
-      </div>
-     -->
+      
 
       <!-- Right: Auto-scrolling product images -->
       <div class="hero-right">
@@ -1161,7 +1100,7 @@
       // ── Navbar scroll effect ──────────────────────────────────
       window.addEventListener("scroll", () => {
         document
-          .getElementById("zara-nav")
+          .getElementById("new-nav")
           .classList.toggle("scrolled", window.scrollY > 50);
       });
 

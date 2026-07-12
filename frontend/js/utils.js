@@ -2,6 +2,8 @@
 // Shared utilities for craftbazaar frontend
 
 const API_BASE = "https://craftbazaar-backend.onrender.com/api";
+// const API_BASE = "http://localhost:5000/api"; // for local development
+
 
 /* ── Auth Helpers ─────────────────────────────────────────── */
 const getToken = () => localStorage.getItem("cb_token");
@@ -258,11 +260,11 @@ const toggleWishlist = (id, btn) => {
   localStorage.setItem("cb_wishlist", JSON.stringify(wishlist));
 };
 
-/* ── Zara Navbar (shared across all pages) ────────────── */
-const initZaraNav = () => {
+/* ── Navbar (shared across all pages) ────────────── */
+const initNewNav = () => {
   // Scroll effect
   window.addEventListener("scroll", () => {
-    const nav = document.getElementById("zara-nav");
+    const nav = document.getElementById("new-nav");
     if (nav) nav.classList.toggle("scrolled", window.scrollY > 50);
   });
 
@@ -333,7 +335,7 @@ const doSearch = () => {
 /* ── Call on every page load ──────────────────────────── */
 document.addEventListener("DOMContentLoaded", () => {
   initNavbar(); // old navbar
-  initZaraNav(); // new Zara navbar
+  initNewNav(); // new navbar
   initScrollAnimations();
   updateCartBadge();
 });
